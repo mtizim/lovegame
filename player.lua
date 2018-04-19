@@ -1,8 +1,3 @@
-class = require("30log")
-
-local player = require("player")
-
-
 local playerClass = Class("Player")
 -- Where the whole player object will go
 function playerClass:init(x,y)
@@ -19,17 +14,4 @@ function playerClass:bounce_y()
     self.vy = self.vy * (-1)
 end
 
-
-local player = playerClass()
-
-function love.load()
-
-end
-
-function love.update(dt)
-
-end
-
-function love.draw()
-    -- love.graphics.print("xdddd",50,50)
-end
+return playerClass()
