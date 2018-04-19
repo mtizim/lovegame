@@ -1,35 +1,47 @@
-class = require("30log")
+Class = require("30log")
 
-local player = require("player")
-
-
-local playerClass = Class("Player")
--- Where the whole player object will go
-function playerClass:init(x,y)
-    self.x, self.y = x, y
-    self.vx, self.vy = 0, 0
-    self.state = "Alive"
-end
-
-function playerClass:bounce_x()
-    self.vx = self.vx * (-1)
-end
-
-function playerClass:bounce_y()
-    self.vy = self.vy * (-1)
-end
-
-
-local player = playerClass()
+DEBUG = false
+STEPTIME = 0.2
+DISPLAY_FRAMES = true
 
 function love.load()
+    local x, y = 30, 100
+    local vx, vy = 7, 3
+    local ax, ay = 0,0
 
+    playerClass = require("player")
+    player = playerClass( x, y,
+                         vx, vy,
+                         ax, ay)
+                         
+    if DEBUG then
+        local clock = os.clock
+        function sleep(n)  -- seconds
+            local t0 = clock()
+            while clock() - t0 <= n do end
+        end
+    end
 end
 
-function love.update(dt)
+if DISPLAY_FRAMES then delta_time = 0 end
 
+function love.update(dt)
+    player:update(dt,{0,500,0,500})
+
+    if DISPLAY_FRAMES then delta_time = dt end
+    if DEBUG then sleep(STEPTIME) end
 end
 
 function love.draw()
-    -- love.graphics.print("xdddd",50,50)
+    player:draw({1,0,0},15)
+
+
+    if DISPLAY_FRAMES then love.graphics.print(1/delta_time,30,30) end
+    if DEBUG then
+        love.graphics.print(player.x, 30, 30)
+        love.graphics.print(player.y, 30, 50)
+        love.graphics.print(player.vx, 30, 70)
+        love.graphics.print(player.vy, 30, 90)
+    end
+
 end
