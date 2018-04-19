@@ -1,6 +1,12 @@
 Class = require("30log")
+hc = require("hardoncollider")
 
-DEBUG = false
+require("helpers")
+require("laser")
+require("player")
+
+
+DEBUG = true
 STEPTIME = 0.2
 DISPLAY_FRAMES = true
 
@@ -8,11 +14,11 @@ function love.load()
     local x, y = 30, 100
     local vx, vy = 7, 3
     local ax, ay = 0,0
+    local size = 15
 
-    playerClass = require("player")
     player = playerClass( x, y,
                          vx, vy,
-                         ax, ay)
+                         ax, ay, size)
                          
     if DEBUG then
         local clock = os.clock
@@ -33,10 +39,10 @@ function love.update(dt)
 end
 
 function love.draw()
-    player:draw({1,0,0},15)
+    player:draw({1,0,0})
 
 
-    if DISPLAY_FRAMES then love.graphics.print(1/delta_time,30,30) end
+    if DISPLAY_FRAMES then love.graphics.print(1/delta_time,30,10) end
     if DEBUG then
         love.graphics.print(player.x, 30, 30)
         love.graphics.print(player.y, 30, 50)

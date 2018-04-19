@@ -8,11 +8,13 @@ end
 
 function playerClass:init( x, y,
                            vx, vy,
-                           ax, ay)
+                           ax, ay, size)
     self.x, self.y = x, y
     self.vx, self.vy = vx, vy
     self.ax, self.ay = ax, ay
     self.state = "alive"
+    self.size = size
+    self.hc_object = hc.circle(x,y,size)
 end
 
 function playerClass:bounce_x()
@@ -26,7 +28,7 @@ function playerClass:bounce_y()
 end
 
 function playerClass:move(x,y)
-    self.x,self.y = x, y
+    self.x , self.y = x, y
 end
 
 function playerClass:check_bounds_rect_bounce(top_y, bottom_y, left_x, right_x)
@@ -39,9 +41,10 @@ function playerClass:check_bounds_rect_bounce(top_y, bottom_y, left_x, right_x)
 end
 
 function playerClass:update(dt,box_array)
-    self.x = self.x + self.vx
-    self.y = self.y + self.vy
-    
+    self:move(self.x + self.vx,
+              self.y + self.vy)
+
+    self.hc_object:moveTo(self.x, self.y)
     self.vx = self.vx + self.ax
     self.vy = self.vy + self.ay
     
@@ -50,10 +53,10 @@ function playerClass:update(dt,box_array)
     
 end
 
-function playerClass:draw(color_array, size)
+function playerClass:draw(color_array)
     -- For now it's a circle
     love.graphics.setColor(color_array)
-    love.graphics.circle("fill",self.x ,self.y ,size)
+    love.graphics.circle("fill",self.x ,self.y , self.size)
 end
 
 
