@@ -7,7 +7,7 @@ require("player")
 
 
 DEBUG = true
-STEPTIME = 0.2
+STEPTIME = 0
 DISPLAY_FRAMES = true
 
 function love.load()
@@ -19,7 +19,12 @@ function love.load()
     player = playerClass( x, y,
                          vx, vy,
                          ax, ay, size)
-                         
+               
+    laser = laserClass(x, y, math.pi,
+                       10, 50,
+                       20, 10000,
+                       6, 6)
+
     if DEBUG then
         local clock = os.clock
         function sleep(n)  -- seconds
@@ -29,25 +34,29 @@ function love.load()
     end
 end
 
-if DISPLAY_FRAMES then delta_time = 0 end
+if DISPLAY_FRAMES then delta_time, total_time = 0 ,0 end
 
 function love.update(dt)
     player:update(dt,{0,500,0,500})
 
-    if DISPLAY_FRAMES then delta_time = dt end
+    laser:update(dt)
+
+    if DISPLAY_FRAMES then delta_time = dt; total_time =total_time + dt end
     if DEBUG then sleep(STEPTIME) end
 end
 
 function love.draw()
     player:draw({1,0,0})
 
+    laser:draw({1,0,0},{0,1,1})
 
-    if DISPLAY_FRAMES then love.graphics.print(1/delta_time,30,10) end
+    if DISPLAY_FRAMES then love.graphics.print(1/delta_time,30,10);
+                           love.graphics.print(total_time,400,10) end
     if DEBUG then
-        love.graphics.print(player.x, 30, 30)
-        love.graphics.print(player.y, 30, 50)
-        love.graphics.print(player.vx, 30, 70)
-        love.graphics.print(player.vy, 30, 90)
+        love.graphics.print(tostring(laser.exploded), 30, 30)
+        love.graphics.print(laser.time_left, 30, 50)
+        love.graphics.print(laser.remain_time, 30, 70)
+        love.graphics.print(tostring(laser.destroyed), 30, 90)
     end
 
 end
