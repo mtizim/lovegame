@@ -33,7 +33,6 @@ end
 
 function laserClass:destroy()
     self.destroyed = true
-    -- print("removed?")
     hc.remove(self.hc_object)
 end
 

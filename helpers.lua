@@ -69,22 +69,9 @@ function linkedlistClass:remove_destroyed()
             before = current
             current = current.next
         end
-        -- self:cunt()
         self.tail.next = nil
     end
 end
-
-
--- function linkedlistClass:cunt()
---     local current = self.head
---     local i = 1
---     while current do
---         i = i + 1
---         current = current.next
---     end
---     print(i)
--- end
-
 
 function linkedlistClass:draw_forall(funct)
     if self.head then
