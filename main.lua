@@ -22,7 +22,7 @@ function love.load()
                
     laser = laserClass(x, y, math.pi,
                        10, 50,
-                       20, 10000,
+                       20, 80,
                        6, 6)
 
     if DEBUG then
@@ -41,6 +41,8 @@ function love.update(dt)
 
     laser:update(dt)
 
+    laser.rotation = laser.rotation + 1/50
+
     if DISPLAY_FRAMES then delta_time = dt; total_time =total_time + dt end
     if DEBUG then sleep(STEPTIME) end
 end
@@ -53,10 +55,10 @@ function love.draw()
     if DISPLAY_FRAMES then love.graphics.print(1/delta_time,30,10);
                            love.graphics.print(total_time,400,10) end
     if DEBUG then
-        love.graphics.print(tostring(laser.exploded), 30, 30)
-        love.graphics.print(laser.time_left, 30, 50)
-        love.graphics.print(laser.remain_time, 30, 70)
-        love.graphics.print(tostring(laser.destroyed), 30, 90)
+        -- love.graphics.print(tostring(laser.exploded), 30, 30)
+        love.graphics.print(laser.x, 30, 50)
+        love.graphics.print(laser.y, 30, 70)
+        love.graphics.print(laser.rotation, 30, 90)
     end
 
 end

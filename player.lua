@@ -1,11 +1,5 @@
 playerClass = Class("Player")
 
-local function sgn(x)
-    if x < 0 then return -1 end
-    if x > 0 then return 1 end
-    if x == 0 then return 0 end
-end
-
 function playerClass:init( x, y,
                            vx, vy,
                            ax, ay, size)
@@ -18,12 +12,10 @@ function playerClass:init( x, y,
 end
 
 function playerClass:bounce_x()
-    self.x = self.x - self.vx
     self.vx = self.vx * (-1)
 end
 
 function playerClass:bounce_y()
-    self.y = self.y - self.vy
     self.vy = self.vy * (-1)
 end
 
@@ -32,12 +24,20 @@ function playerClass:move(x,y)
 end
 
 function playerClass:check_bounds_rect_bounce(top_y, bottom_y, left_x, right_x)
-    if self.y <= top_y or self.y >= bottom_y then
+    if self.y <= top_y then
         self:bounce_y()
-    end
-    if self.x<=left_x or self.x>=right_x then
+        self:move(self.x, top_y)
+    else if self.y >= bottom_y then
+        self:bounce_y()
+        self:move(self.x, bottom_y)
+    end end
+    if self.x<=left_x then
         self:bounce_x()
-    end
+        self:move(left_x, self.y)
+    else if self.x>=right_x then
+        self:bounce_x()
+        self:move(right_x, self.y)
+    end end
 end
 
 function playerClass:update(dt,box_array)
