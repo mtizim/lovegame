@@ -1,17 +1,88 @@
-function rect_collision(x1,y1,x2,y2, x3,y3,x4,y4)
-    w1 = x2 - x1
-    h1 = x2 - x1
-    return x1 < x2+w2 and
-           x2 < x1+w1 and
-           y1 < y2+h2 and
-           y2 < y1+h1
-  end
-
-
 function sgn(x)
     if x < 0 then return -1 end
     if x > 0 then return 1 end
     if x == 0 then return 0 end
+end
+
+node = Class()
+
+function node:init(value,next)
+    self.value ,self.next = value,next
+end
+
+linkedlistClass = Class()
+
+
+function linkedlistClass:init(value)
+    if value then
+        self.head = node(value,nil) 
+        self.tail = self.head
+        self.length = 1
+    end
+end
+
+function linkedlistClass:at(i)
+    local current = self.head
+    for i=1,(i-1) do
+        current = current.next
+    end
+    return current
+end
+
+function linkedlistClass:update_forall(dt)
+    if self.head then
+        current = self.head
+        while current do
+            current.value:update(dt)
+            current = current.next
+        end
+    end
+end
+
+function linkedlistClass:remove(i)
+    if i == 1 then
+        self.head = self:at(2)
+        return
+    end
+    local before = self:at(i-1)
+    -- so it skips the ith node
+    before.next = before.next.next
+    self.length = self.length -1
+end
+
+function linkedlistClass:draw_forall(funct)
+    if self.head then
+        current = self.head
+        while current do
+            current.value:draw()
+            current = current.next
+        end
+    end
+end
+
+function linkedlistClass:remove_destroyed()
+    local current = self.head
+    while current do
+        if current.value.destroyed then
+            -- deep dopy of the next one
+            current.value = current.next.value
+            current.next = current.next.next
+            self.length = self.length -1
+        end
+        current = current.next
+    end
+end
+
+function linkedlistClass:add(value)
+    if not self.head then
+        self.head = node(value,nil)
+        self.tail = self.head
+        self.length = 1
+        return
+    end
+    self.tail.next = node(value,nil)
+    self.tail = self.tail.next
+    self.length = self.length + 1
 end
 
 
@@ -27,4 +98,4 @@ function rotatedRectangle(mode, x, y, w, h, r)
         love.graphics.rectangle( mode, -w/2, -h/2, w, h)
       love.graphics.pop()
     love.graphics.pop()
-  end
+end
