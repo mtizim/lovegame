@@ -11,11 +11,11 @@ function gameClass:init(offset)
     self.offset = offset
     -- top bottom left right
     self.bounding_box = { offset, window_height - offset,
-    offset, window_width  - offset}
+                          offset, window_width  - offset}
     -- x y vx vy ax ay size
     self.player = playerClass( x, y,
-    vx, vy,
-    ax, ay, size)
+                               vx, vy,
+                               ax, ay, size)
     
     self.enemies = linkedlistClass()
 end
@@ -26,11 +26,11 @@ function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
     local x = math.random( 2 * offset, window_width - 2 * offset )
     local y = math.random( 2 * offset, window_height - 2 * offset)
     local r = math.atan2( x - player.x, y - player.y)
-    laser = laserClass(x,y,r,
-                       width,height,
-                       width, height * 100,
-                       time,r_time,
-                       color,explodedcolor)
+    local laser = laserClass(x,y,r,
+                             width,height,
+                             width, height * 100,
+                             time,r_time,
+                             color,explodedcolor)
     self.enemies:add(laser)
 end
 
@@ -46,10 +46,18 @@ end
 
 function gameClass:update(dt)
     self.player:update(dt,self.bounding_box)
-    self:new_laser(10,100,8,1,{1,0,0},{0,1,1})
-    self.enemies:remove_destroyed()
+
+    self:new_laser(10,100,1.5,0.3,{1,0,0},{0,1,1})
     self.enemies:update_forall(dt)
-    print(self.enemies.length)
+    self.enemies:remove_destroyed()
+
+    collectgarbage()
+    print(collectgarbage("count"),self.enemies.length)
+end
+
+function gameClass:destroy()
+    hc.remove(self.player.hc_object)
+    hc.resetHash()
 end
 
 function gameClass:draw()

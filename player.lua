@@ -23,7 +23,11 @@ function playerClass:move(x,y)
     self.x , self.y = x, y
 end
 
-function playerClass:check_bounds_rect_bounce(top_y, bottom_y, left_x, right_x)
+function playerClass:check_bounds_rect_bounce(box_array)
+    local top_y = box_array[1]
+    local bottom_y = box_array[2]
+    local left_x = box_array[3]
+    local right_x = box_array[4]
     if self.y <= top_y then
         self:bounce_y()
         self:move(self.x, top_y)
@@ -44,12 +48,11 @@ function playerClass:update(dt,box_array)
     self:move(self.x + self.vx,
               self.y + self.vy)
 
-    self.hc_object:moveTo(self.x, self.y)
+    -- self.hc_object:moveTo(self.x, self.y)
     self.vx = self.vx + self.ax
     self.vy = self.vy + self.ay
     
-    self:check_bounds_rect_bounce(box_array[1], box_array[2],
-                                  box_array[3], box_array[4])
+    self:check_bounds_rect_bounce(box_array)
     
 end
 

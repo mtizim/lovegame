@@ -1,4 +1,4 @@
-laserClass = Class()
+laserClass = Class("laser")
 
 function laserClass:init( x, y, r,
                           width, height,
@@ -24,6 +24,7 @@ end
 
 function laserClass:explode()
     self.exploded = true
+    hc.remove(self.hc_object)
     self.hc_object = hc.rectangle(self.x + self.width_exploded/2,
                                   self.y + self.height_exploded/2,
                                   self.width, self.height)
@@ -32,6 +33,8 @@ end
 
 function laserClass:destroy()
     self.destroyed = true
+    -- print("removed?")
+    hc.remove(self.hc_object)
 end
 
 function laserClass:update(dt)

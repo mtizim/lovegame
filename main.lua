@@ -8,9 +8,9 @@ require("laser")
 require("player")
 math.randomseed(os.time())
 
-DEBUG = true
+DEBUG = false
 STEPTIME = 0
-DISPLAY_FRAMES = true
+DISPLAY_FRAMES = false
 
 
 function love.load()

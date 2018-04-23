@@ -4,7 +4,7 @@ function sgn(x)
     if x == 0 then return 0 end
 end
 
-node = Class()
+node = Class("node")
 
 function node:init(value,next)
     self.value ,self.next = value,next
@@ -30,6 +30,7 @@ function linkedlistClass:at(i)
 end
 
 function linkedlistClass:update_forall(dt)
+    local current
     if self.head then
         current = self.head
         while current do
@@ -50,26 +51,48 @@ function linkedlistClass:remove(i)
     self.length = self.length -1
 end
 
+function linkedlistClass:remove_destroyed()
+    local current = self.head
+    local before
+    if self.length then
+        for i=1,self.length do
+            if current.value.destroyed then
+                if current == self.head then
+                    self.head = self.head.next
+                    current.value = nil
+                else 
+                    before.next = current.next
+                    current.value = nil
+                end
+                self.length = self.length - 1
+            end
+            before = current
+            current = current.next
+        end
+        -- self:cunt()
+        self.tail.next = nil
+    end
+end
+
+
+-- function linkedlistClass:cunt()
+--     local current = self.head
+--     local i = 1
+--     while current do
+--         i = i + 1
+--         current = current.next
+--     end
+--     print(i)
+-- end
+
+
 function linkedlistClass:draw_forall(funct)
     if self.head then
-        current = self.head
+        local current = self.head
         while current do
             current.value:draw()
             current = current.next
         end
-    end
-end
-
-function linkedlistClass:remove_destroyed()
-    local current = self.head
-    while current do
-        if current.value.destroyed then
-            -- deep dopy of the next one
-            current.value = current.next.value
-            current.next = current.next.next
-            self.length = self.length -1
-        end
-        current = current.next
     end
 end
 
@@ -87,9 +110,9 @@ end
 
 
 function rotatedRectangle(mode, x, y, w, h, r)
-    r = r
-    ox = x + w/2
-    oy = y + h/2
+    local r = r
+    local ox = x + w/2
+    local oy = y + h/2
 
     love.graphics.push()
       love.graphics.translate(ox, oy )
