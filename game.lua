@@ -46,7 +46,7 @@ end
 
 function gameClass:update(dt)
     self.player:update(dt,self.bounding_box)
-    self:new_laser(10,100,0.1,0.1,{1,0,0},{0,1,1})
+    self:new_laser(10,100,8,1,{1,0,0},{0,1,1})
     self.enemies:remove_destroyed()
     self.enemies:update_forall(dt)
     print(self.enemies.length)
