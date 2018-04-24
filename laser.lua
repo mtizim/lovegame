@@ -19,6 +19,8 @@ function laserClass:init( x, y, r,
     self.exploded = false
     self.destroyed = false
     
+    self.alpha = 1
+
     self.hc_object = hc.rectangle(x + width/2 , y + width/2, width, height)
 end
 
@@ -45,13 +47,25 @@ function laserClass:update(dt)
     if self.time_left <= 0 and self.exploded then self:destroy() end
 end
 
+function laserClass:alpha_function_exploded()
+    local x = self.remain_time - self.time_left --time passed
+
+    return ((self.remain_time * self.remain_time) - (x * x) )
+                / (self.remain_time * self.remain_time)
+end
+
 function laserClass:draw_exploded()
+    self.alpha = self:alpha_function_exploded()
+    self.color_array = self.color_array_exploded
+    love.graphics.setColor(self.color_array[1],self.color_array[2],
+                           self.color_array[3],self.alpha)
     rotatedRectangle("fill", self.x - self.width_exploded/2, 
                              self.y - self.height_exploded/2,
                              self.width_exploded, self.height_exploded, self.rotation)
 end
 
 function laserClass:draw_normal()
+    love.graphics.setColor(self.color_array)
     rotatedRectangle("fill", self.x - self.width/2,
                              self.y - self.height/2,
                              self.width, self.height, self.rotation)
@@ -59,8 +73,6 @@ end
 
 function laserClass:draw()
     if not self.destroyed then
-        if self.exploded then self.color_array = self.color_array_exploded end
-        love.graphics.setColor(self.color_array)
         if self.exploded then
             self:draw_exploded()
         else

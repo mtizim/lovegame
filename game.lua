@@ -18,6 +18,9 @@ function gameClass:init(offset)
                                ax, ay, size)
     
     self.enemies = linkedlistClass()
+
+    self.laser_every = 0.5 --seconds
+    self.laser_every_timer = 0
 end
 
 function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
@@ -47,12 +50,18 @@ end
 function gameClass:update(dt)
     self.player:update(dt,self.bounding_box)
 
-    self:new_laser(10,100,1.5,0.3,{1,0,0},{0,1,1})
+    -- so that a laser is only spawned once every
+    -- timer seconds
+    self.laser_every_timer = self.laser_every_timer + dt
+    if self.laser_every_timer >= self.laser_every then
+        self:new_laser(10,100,1.5,0.3,{1,0,0},{0,1,1})
+        self.laser_every_timer = 0
+    end
+    -- update all lases and remove destroyed ones
     self.enemies:update_forall(dt)
     self.enemies:remove_destroyed()
 
     collectgarbage()
-    print(collectgarbage("count"),self.enemies.length)
 end
 
 function gameClass:destroy()
