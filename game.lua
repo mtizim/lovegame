@@ -1,10 +1,10 @@
 gameClass = Class()
 
-function gameClass:init(offset)
+function gameClass:init(offset,theme)
     local x, y = window_width/2, window_height/2
     local vx, vy = 0, 7
     local size = 15
-    local maxspeed = 7
+    local maxspeed = 5
     local walldamp = 0.3
 
     self.offset = offset
@@ -26,6 +26,8 @@ function gameClass:init(offset)
 
     self.laser_every = 0.9 --seconds
     self.laser_every_timer = 0
+
+    self.theme = theme
 end
 
 function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
@@ -44,7 +46,7 @@ end
 
 
 -- really basic
-function gameClass:drawBoundaries(colorArray)
+function gameClass:draw_boundaries(colorArray)
     love.graphics.setColor(colorArray)
     love.graphics.rectangle("fill",0,0,window_width, self.offset)
     love.graphics.rectangle("fill",0,window_height,window_width, -self.offset)
@@ -53,23 +55,28 @@ function gameClass:drawBoundaries(colorArray)
 end
 
 function gameClass:update(dt)
-
+    --joystick reaction
     self.player.ax,self.player.ay = self.game_controller:update()
     self.player:update(dt,self.bounding_box)
-
     -- so that a laser is only spawned once every
-    -- timer seconds
+    --                                 timer seconds
     self.laser_every_timer = self.laser_every_timer + dt
     if self.laser_every_timer >= self.laser_every then
                                                     --magic constants here should change when possible
-        self:new_laser(10,100,self.laser_stay,self.laser_disappear,{1,0,0},{1,1,1})
+        self:new_laser(10,100,self.laser_stay,self.laser_disappear,
+                       self.theme.laser,self.theme.laser_exploded)
         self.laser_every_timer = 0
     end
-    -- update all lases and remove destroyed ones
+    -- update all lasers and remove destroyed ones
     self.enemies:update_forall(dt)
     self.enemies:remove_destroyed()
 
     collectgarbage()
+end
+
+function gameClass:draw_background()
+    love.graphics.setColor(self.theme.background)
+    love.graphics.rectangle("fill",0,0,window_width,window_height)
 end
 
 function gameClass:destroy()
@@ -78,10 +85,10 @@ function gameClass:destroy()
 end
 
 function gameClass:draw()
-    -- colours should not be hardcoded
-    -- this basically works as the z scale so yeah
-    self.player:draw({1,0,0})
+    self:draw_background()
+    self.player:draw(self.theme.player)
     self.enemies:draw_forall()
-    self.game_controller:draw({1,1,1},5,{1,1,1},1.2)
-    self:drawBoundaries({1,1,1})
+    self.game_controller:draw(self.theme.controller,5,self.theme.controller,
+                              1.2,self.theme.controller_alpha)
+    self:draw_boundaries(self.theme.boundaries)
 end

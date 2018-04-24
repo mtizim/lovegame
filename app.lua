@@ -2,7 +2,7 @@ application = {}
 
 function application:init()
     local offset = 10
-    local game = gameClass(offset)
+    local game = gameClass(offset,themes.black_red)
     self.current = game
     self.time_elapsed = 0
 end

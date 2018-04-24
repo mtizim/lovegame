@@ -6,6 +6,7 @@ require("app")
 require("helpers")
 require("laser")
 require("player")
+require("themes")
 require("gameController")
 math.randomseed(os.time())
 
@@ -57,3 +58,15 @@ function love.draw()
     end
 
 end
+
+-- i only ever need the first touch
+
+first = nil
+function love.touchpressed(id, x, y)
+  if not first then first = id end
+end
+-- You can now do stuff with the first touch.
+function love.touchreleased(id, x, y)
+  if id == first then first = nil end
+end
+
