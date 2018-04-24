@@ -4,6 +4,11 @@ function sgn(x)
     if x == 0 then return 0 end
 end
 
+function abs_min(a,b)
+    if math.abs(a)<math.abs(b) then return a end
+    return b
+end
+
 node = Class("node")
 
 function node:init(value,next)

@@ -6,7 +6,12 @@ require("app")
 require("helpers")
 require("laser")
 require("player")
+require("gameController")
 math.randomseed(os.time())
+
+osString = love.system.getOS( )
+window_width, window_height = love.graphics.getDimensions()
+
 
 DEBUG = false
 STEPTIME = 0
@@ -26,7 +31,7 @@ function love.load()
     end
 end
 
-if DISPLAY_FRAMES then delta_time, total_time = 0 ,0 end
+if DISPLAY_FRAMES then delta_time, total_time = 0 , 0 end
 
 function love.update(dt)
 

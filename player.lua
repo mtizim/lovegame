@@ -2,21 +2,24 @@ playerClass = Class("Player")
 
 function playerClass:init( x, y,
                            vx, vy,
-                           ax, ay, size)
+                           ax, ay, size,
+                           maxspeed, walldamp)
     self.x, self.y = x, y
     self.vx, self.vy = vx, vy
     self.ax, self.ay = ax, ay
     self.state = "alive"
     self.size = size
+    self.maxspeed = maxspeed
+    self.walldamp = walldamp
     self.hc_object = hc.circle(x,y,size)
 end
 
 function playerClass:bounce_x()
-    self.vx = self.vx * (-1)
+    self.vx = self.vx * (-1) * self.walldamp
 end
 
 function playerClass:bounce_y()
-    self.vy = self.vy * (-1)
+    self.vy = self.vy * (-1) * self.walldamp
 end
 
 function playerClass:move(x,y)
@@ -44,6 +47,15 @@ function playerClass:check_bounds_rect_bounce(box_array)
     end end
 end
 
+function playerClass:normalize_speed()
+    local speed =  math.sqrt(self.vx*self.vx + self.vy*self.vy)
+    if speed and speed > self.maxspeed then
+        self.vx = self.vx * self.maxspeed / speed
+        self.vy = self.vy * self.maxspeed / speed
+    end
+end
+
+
 function playerClass:update(dt,box_array)
     self:move(self.x + self.vx,
               self.y + self.vy)
@@ -51,7 +63,7 @@ function playerClass:update(dt,box_array)
     -- self.hc_object:moveTo(self.x, self.y)
     self.vx = self.vx + self.ax
     self.vy = self.vy + self.ay
-    
+    self:normalize_speed()
     self:check_bounds_rect_bounce(box_array)
     
 end

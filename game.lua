@@ -1,13 +1,12 @@
 gameClass = Class()
 
-
 function gameClass:init(offset)
-    local x, y = 30, 100
-    local vx, vy = 7, 3
-    local ax, ay = 0,0
+    local x, y = window_width/2, window_height/2
+    local vx, vy = 0, 7
     local size = 15
-    
-    window_width, window_height = love.graphics.getDimensions()
+    local maxspeed = 7
+    local walldamp = 0.3
+
     self.offset = offset
     -- top bottom left right
     self.bounding_box = { offset, window_height - offset,
@@ -15,11 +14,17 @@ function gameClass:init(offset)
     -- x y vx vy ax ay size
     self.player = playerClass( x, y,
                                vx, vy,
-                               ax, ay, size)
+                               0, 0, size, 
+                               maxspeed,walldamp)
     
+    self.laser_stay = 1.5
+    self.laser_disappear = 0.3
+
     self.enemies = linkedlistClass()
 
-    self.laser_every = 0.5 --seconds
+    self.game_controller = gamecontrollerClass(60,0.5)
+
+    self.laser_every = 0.9 --seconds
     self.laser_every_timer = 0
 end
 
@@ -48,13 +53,16 @@ function gameClass:drawBoundaries(colorArray)
 end
 
 function gameClass:update(dt)
+
+    self.player.ax,self.player.ay = self.game_controller:update()
     self.player:update(dt,self.bounding_box)
 
     -- so that a laser is only spawned once every
     -- timer seconds
     self.laser_every_timer = self.laser_every_timer + dt
     if self.laser_every_timer >= self.laser_every then
-        self:new_laser(10,100,1.5,0.3,{1,0,0},{0,1,1})
+                                                    --magic constants here should change when possible
+        self:new_laser(10,100,self.laser_stay,self.laser_disappear,{1,0,0},{1,1,1})
         self.laser_every_timer = 0
     end
     -- update all lases and remove destroyed ones
@@ -70,7 +78,10 @@ function gameClass:destroy()
 end
 
 function gameClass:draw()
+    -- colours should not be hardcoded
+    -- this basically works as the z scale so yeah
     self.player:draw({1,0,0})
     self.enemies:draw_forall()
+    self.game_controller:draw({1,1,1},5,{1,1,1},1.2)
     self:drawBoundaries({1,1,1})
 end
