@@ -38,6 +38,7 @@ function love.update(dt)
 
     application:update(dt)
 
+    print(collectgarbage("count"))
 
     if DISPLAY_FRAMES then delta_time = dt; total_time =total_time + dt end
     if DEBUG then sleep(STEPTIME) end
