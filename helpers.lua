@@ -1,14 +1,6 @@
-function sgn(x)
-    if x < 0 then return -1 end
-    if x > 0 then return 1 end
-    if x == 0 then return 0 end
-end
-
-function abs_min(a,b)
-    if math.abs(a)<math.abs(b) then return a end
-    return b
-end
-
+-- The whole class is needed so that i can iterate and add
+-- lasers to the active lasers list
+-- it might be easily used for any other enemy should i add them
 node = Class("node")
 
 function node:init(value,next)
@@ -101,6 +93,8 @@ function linkedlistClass:add(value)
 end
 
 
+-- Love2d doesn't have this for some reason
+-- so i needed to write one myself
 function rotatedRectangle(mode, x, y, w, h, r)
     local r = r
     local ox = x + w/2

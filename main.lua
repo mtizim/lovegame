@@ -1,13 +1,15 @@
 Class = require("30log")
 hc = require("hardoncollider")
 
-require("game")
+
 require("app")
+require("game")
+require("gameController")
 require("helpers")
 require("laser")
 require("player")
+require("settings")
 require("themes")
-require("gameController")
 math.randomseed(os.time())
 
 osString = love.system.getOS( )
@@ -38,10 +40,12 @@ function love.update(dt)
 
     application:update(dt)
 
-    print(collectgarbage("count"))
-
+    
     if DISPLAY_FRAMES then delta_time = dt; total_time =total_time + dt end
-    if DEBUG then sleep(STEPTIME) end
+    if DEBUG then
+        sleep(STEPTIME)
+        print(collectgarbage("count"))
+    end
 end
 
 function love.draw()
@@ -49,8 +53,11 @@ function love.draw()
     application:draw()
 
 
-    if DISPLAY_FRAMES then love.graphics.print(1/delta_time,30,10);
-                           love.graphics.print(total_time,400,10) end
+    if DISPLAY_FRAMES then 
+        love.graphics.setColor({1,1,1})
+        love.graphics.print(1/delta_time,30,10);
+        love.graphics.print(total_time,400,10) 
+    end
     if DEBUG then
         -- love.graphics.print(tostring(laser.exploded), 30, 30)
         -- love.graphics.print(game.laser.x, 30, 50)
@@ -60,13 +67,11 @@ function love.draw()
 
 end
 
--- i only ever need the first touch
-
+--I only ever need the first touch
 first = nil
 function love.touchpressed(id, x, y)
   if not first then first = id end
 end
--- You can now do stuff with the first touch.
 function love.touchreleased(id, x, y)
   if id == first then first = nil end
 end
