@@ -19,8 +19,6 @@ function application:restart_game()
 end
 
 function application:update(dt)
-    collectgarbage()
-    print(collectgarbage("count"))
     self.current:update(dt)
 end
 
