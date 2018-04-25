@@ -1,7 +1,14 @@
 gameClass = Class()
 
 function gameClass:init()
+    --initializing appropriate things
+    
     local x, y = window_width/2, window_height/2
+    self.enemies = linkedlistClass()
+    self.collider = hc.new()
+    self.game_controller = gamecontrollerClass(settings.controller_size,
+                                               settings.controller_mul)
+    self.laser_every_timer = 0
 
     --settings are applied here
     self.offset = settings.offset
@@ -15,15 +22,9 @@ function gameClass:init()
     self.player = playerClass( x, y,
                                settings.player_start_vx, settings.player_start_vy,
                                0, 0, settings.player_size, 
-                               settings.player_maxspeed,settings.walldamp)
+                               settings.player_maxspeed,settings.walldamp,
+                               self.collider)
     
-    --initializing appropriate things
-    self.enemies = linkedlistClass()
-
-    self.game_controller = gamecontrollerClass(settings.controller_size,
-                                               settings.controller_mul)
-
-    self.laser_every_timer = 0
 
 end
 
@@ -37,7 +38,8 @@ function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
                              width,height,
                              width, height * 100,
                              time,r_time,
-                             color,explodedcolor)
+                             color,explodedcolor,
+                             self.collider)
     self.enemies:add(laser)
 end
 

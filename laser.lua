@@ -6,7 +6,8 @@ function laserClass:init( x, y, r,
                           width, height,
                           width_exploded, height_exploded,
                           time, remain_time,
-                          color_array, color_array_exploded)
+                          color_array, color_array_exploded,
+                          collider)
     self.x, self.y = x, y
     self.rotation = r
     self.width, self.height = width, height
@@ -21,6 +22,7 @@ function laserClass:init( x, y, r,
     self.exploded = false
     self.destroyed = false
     
+    self.collider = collider
     self.alpha = 1
     self.hc_object = nil
 end
@@ -28,9 +30,10 @@ end
 -- Changes state to exploded and adds the collision object
 function laserClass:explode()
     self.exploded = true
-    self.hc_object = hc.rectangle(self.x + self.width_exploded/2,
-                                  self.y + self.height_exploded/2,
-                                  self.width, self.height)
+    self.hc_object = self.collider:rectangle(self.x - self.width_exploded/2,
+                                             self.y - self.height_exploded/2,
+                                             self.width_exploded, self.height_exploded)
+    self.hc_object:rotate(-self.rotation)
     self.time_left = self.remain_time
 end
 
@@ -39,7 +42,9 @@ end
 -- garbage
 function laserClass:destroy()
     self.destroyed = true
-    hc.remove(self.hc_object)
+    if self.hc_object then
+        self.collider:remove(self.hc_object)
+    end
 end
 
 -- Ticks the timer and explodes or destroys the laser
@@ -48,8 +53,17 @@ function laserClass:update(dt)
     -- so that minimum value is 0
     if self.time_left<0 and not self.exploded then self.time_left = 0 end
     if self.time_left==0 and not self.exploded then self:explode() end
-
     if self.time_left <= 0 and self.exploded then self:destroy() end
+
+    if self.remain_time - self.time_left > settings.laser_collision_timer
+       and self.hc_object then
+        self.collider:remove(self.hc_object)
+    end 
+    -- Ok this is the one bit of spaghetti i'll allow myself
+    -- checks for collisions
+    if self.hc_object then
+        self:player_collision(application.current.player)
+    end
 end
 
 -- The appropriate function for opacity
@@ -59,6 +73,15 @@ function laserClass:alpha_function_exploded()
     local x = self.remain_time - self.time_left --time passed
 
     return 1 - ((x * x) / (self.remain_time * self.remain_time))
+end
+
+--Checks if the laser collides with the objects
+function laserClass:player_collision(player)
+    if self.hc_object:collidesWith(player.hc_object) then
+        print ("hit")
+    else
+        print("not hit")
+    end
 end
 
 --Self explanatory

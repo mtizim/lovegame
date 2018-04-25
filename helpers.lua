@@ -92,6 +92,13 @@ function linkedlistClass:add(value)
     self.length = self.length + 1
 end
 
+--Self explanatory
+function check_collision(object_a,object_b)
+    if object_a and object_b then
+        return object_a:collidesWith(object_b)
+    end
+    return false
+end
 
 -- Love2d doesn't have this for some reason
 -- so i needed to write one myself

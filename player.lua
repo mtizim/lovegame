@@ -4,7 +4,8 @@ playerClass = Class("Player")
 function playerClass:init( x, y,
                            vx, vy,
                            ax, ay, size,
-                           maxspeed, walldamp)
+                           maxspeed, walldamp,
+                           collider)
     self.x, self.y = x, y
     self.vx, self.vy = vx, vy
     self.ax, self.ay = ax, ay
@@ -12,7 +13,8 @@ function playerClass:init( x, y,
     self.size = size
     self.maxspeed = maxspeed
     self.walldamp = walldamp
-    self.hc_object = hc.circle(x,y,size)
+    self.collider = collider
+    self.hc_object = collider:circle(x,y,size)
 end
 
 --Bounces off the wall
@@ -64,7 +66,6 @@ end
 function playerClass:update(dt,box_array)
     self:move(self.x + self.vx,
               self.y + self.vy)
-
     self.hc_object:moveTo(self.x, self.y)
     self.vx = self.vx + self.ax
     self.vy = self.vy + self.ay

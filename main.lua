@@ -1,5 +1,6 @@
 Class = require("30log")
 hc = require("hardoncollider")
+inspect = require("inspect")
 
 
 require("app")
