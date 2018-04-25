@@ -9,7 +9,7 @@ function playerClass:init( x, y,
     self.x, self.y = x, y
     self.vx, self.vy = vx, vy
     self.ax, self.ay = ax, ay
-    self.state = "alive"
+    self.alive = true
     self.size = size
     self.maxspeed = maxspeed
     self.walldamp = walldamp

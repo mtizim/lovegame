@@ -6,10 +6,12 @@ function gameClass:init()
     local x, y = window_width/2, window_height/2
     self.enemies = linkedlistClass()
     self.collider = hc.new()
+    self.pressed_before_bool = false
     self.game_controller = gamecontrollerClass(settings.controller_size,
                                                settings.controller_mul)
     self.laser_every_timer = 0
-
+    -- is it the first time showing the gameover screen?
+    self.first_gameover_update_bool = true
     --settings are applied here
     self.offset = settings.offset
     self.laser_stay = settings.laser_stay_base
@@ -53,10 +55,9 @@ function gameClass:draw_boundaries(colorArray)
     love.graphics.rectangle("fill",window_width,0,-self.offset,window_height)
 end
 
---Updates appropriate objects
-function gameClass:update(dt)
-    --joystick reaction
-    self.player.ax,self.player.ay = self.game_controller:update()
+function gameClass:update_normal(dt,ax,ay)
+    self.player.ax = ax or 0 
+    self.player.ay = ay or 0
     self.player:update(dt,self.bounding_box)
     -- so that a laser is only spawned once every
     --                                 timer seconds
@@ -64,12 +65,51 @@ function gameClass:update(dt)
     if self.laser_every_timer >= self.laser_every then
         collectgarbage()
         self:new_laser(settings.laser_width,100,self.laser_stay,self.laser_disappear,
-                       self.theme.laser,self.theme.laser_exploded)
+                    self.theme.laser,self.theme.laser_exploded)
         self.laser_every_timer = 0
     end
     -- update all lasers and remove destroyed ones
     self.enemies:update_forall(dt)
     self.enemies:remove_destroyed()
+end
+
+function gameClass:update_gameover(dt,ax,ay)
+    -- display score
+    -- maybe time played
+    -- max score but i have to implement that
+    -- definitely need to save max score here
+    local pressed
+    if osString == "Windows " or osString =="Linux" or osString =="OS X" then
+        pressed = love.mouse.isDown(1)
+    else
+        pressed = not not first -- cast too boolean
+    end
+
+    if pressed and not self.pressed_before_bool then
+        application:restart_game()
+    end
+end
+
+function gameClass:update_touch()
+    if osString == "Windows " or osString =="Linux" or osString =="OS X" then
+        self.pressed_before_bool = love.mouse.isDown(1)
+    else
+        self.pressed_before_bool = not not first -- cast to boolean
+    end
+end
+
+--Updates appropriate objects
+function gameClass:update(dt)
+    --joystick reaction
+    if self.player.alive then
+        local ax,ay = self.game_controller:update()
+        self:update_normal(dt,ax,ay)
+    else
+        self.game_controller.pressed.bool = false
+        self:update_gameover(dt)
+    end
+    --needs to be called last!!!
+    self:update_touch()
 end
 
 --Self explanatory
@@ -80,8 +120,7 @@ end
 
 --Self explanatory
 function gameClass:destroy()
-    hc.remove(self.player.hc_object)
-    hc.resetHash()
+    self.collider = nil
 end
 
 --Draws appropriate objects

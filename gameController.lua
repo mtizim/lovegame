@@ -30,7 +30,7 @@ function gamecontrollerClass:update(dt)
             return ax,ay
         elseif not mouse_state then
             self.pressed.bool = false
-            return 0,0
+            return nil,nil
         end
     -- android/ios
     else

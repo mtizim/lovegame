@@ -74,6 +74,10 @@ function linkedlistClass:draw_forall(funct)
     if self.head then
         local current = self.head
         while current do
+            -- dev: helpful for hitboxes
+            -- if current.value.hc_object then
+            --     current.value.hc_object:draw("line")
+            -- end
             current.value:draw()
             current = current.next
         end
