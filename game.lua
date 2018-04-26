@@ -35,7 +35,8 @@ end
 function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
     local x = math.random( 2 * self.offset, window_width - 2 * self.offset )
     local y = math.random( 2 * self.offset, window_height - 2 * self.offset)
-    local r = math.atan2( x - self.player.x, y - self.player.y)
+    local r = math.atan2( x - self.player.x, y - self.player.y) + math.random() * settings.laser_random_r_deviation * 2 
+                                                                  - settings.laser_random_r_deviation
     local laser = laserClass(x,y,r,
                              width,height,
                              width, height * 100,
@@ -64,7 +65,7 @@ function gameClass:update_normal(dt,ax,ay)
     self.laser_every_timer = self.laser_every_timer + dt
     if self.laser_every_timer >= self.laser_every then
         collectgarbage()
-        self:new_laser(settings.laser_width,100,self.laser_stay,self.laser_disappear,
+        self:new_laser(settings.laser_width,settings.laser_height,self.laser_stay,self.laser_disappear,
                     self.theme.laser,self.theme.laser_exploded)
         self.laser_every_timer = 0
     end

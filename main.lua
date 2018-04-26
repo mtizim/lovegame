@@ -1,6 +1,6 @@
 Class = require("30log")
 hc = require("hardoncollider")
-inspect = require("inspect")
+-- inspect = require("inspect")
 
 
 require("app")
@@ -9,8 +9,8 @@ require("gameController")
 require("helpers")
 require("laser")
 require("player")
-require("settings")
 require("themes")
+require("settings")
 math.randomseed(os.time())
 
 osString = love.system.getOS( )

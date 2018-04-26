@@ -89,7 +89,7 @@ end
 
 --Self explanatory
 function laserClass:draw_exploded()
-    self.alpha = self:alpha_function_exploded()
+    self.alpha = 255 * self:alpha_function_exploded()
     self.color_array = self.color_array_exploded
     love.graphics.setColor(self.color_array[1],self.color_array[2],
                            self.color_array[3],self.alpha)
