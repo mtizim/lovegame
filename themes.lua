@@ -1,7 +1,7 @@
-local red = {229.5 , 0 ,0}
-local white = {229.5 ,229.5 ,229.5}
-local black = {25.5, 25.5 ,25.5}
-local yellowish_white = {229.5,229.5,183.6}
+local red = {0.9 , 0 ,0}
+local white = {0.9 ,0.9 ,0.9}
+local black = {0.1,, 0.1 ,0.1}
+local yellowish_white = {0.9,0.9,0.72}
 
 
 themes = {
@@ -11,7 +11,7 @@ themes = {
         laser_exploded = white,
         player = red,
         controller =  white,
-        controller_alpha = 76.5, 
+        controller_alpha = 0.3, 
         boundaries = white,
         background = black,
     },
@@ -21,7 +21,7 @@ themes = {
         laser_exploded = red,
         player = black,
         controller = black,
-        controller_alpha = 178.5,
+        controller_alpha = 0.7,
         boundaries = red,
         background = yellowish_white
     }

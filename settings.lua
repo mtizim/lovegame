@@ -19,8 +19,7 @@ settings = {
     controller_mul = 0.5,
     controller_dotradius = 5, -- 10 for mobile
     controller_line = 1.2,  -- ok for mobile
-    theme = theme_names[settings.theme_number]
     --variable in settings tab
-    theme_number = 1
+    theme = theme_names[1],
     controller_size = 60, --base at least 120 for mobile
 }

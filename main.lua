@@ -1,5 +1,5 @@
-Class = require("30log")
-hc = require("hardoncollider")
+Class = require("dependencies.30log")
+hc = require("dependencies.hardoncollider")
 -- inspect = require("inspect")
 
 
