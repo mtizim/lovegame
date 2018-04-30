@@ -69,22 +69,29 @@ paused_main_font=love.graphics.newFont(settings.font,settings.paused_main_font_s
 
 -- changeable ones that need to be saved
 function read_settings()
-    local file = io.open("settings.txt")
-    io.input(file)
-        settings.theme_number = tonumber(io.read())
-        settings.controller_size = tonumber(io.read())
-    io.close(file)
+    local file = love.filesystem.newFile("settings.txt")
+    file:open("r")
+        local read = file:read("string")
+        local index = 1
+        local valtab = {}
+        for val in string.gmatch(read, "%S+") do
+            valtab[index] = val
+            index = index + 1
+        end
+        settings.theme_number = tonumber(valtab[1])
+        settings.controller_size = tonumber(valtab[2])
+    file = nil
     settings.theme = theme_names[settings.theme_number]
 end
 
 function save_settings()
-    local file = io.open("settings.txt","w")
-    io.output(file)
-        io.write(settings.theme_number,"\n")
-        io.write(settings.controller_size,"\n")
-
-    io.flush() 
-    io.close()
+    local file = love.filesystem.newFile("settings.txt","w")
+    file:open("w")
+    file:write(settings.theme_number)
+        file:write("\n")
+    file:write(settings.controller_size)
+        file:write("\n")
+    file = nil
 end
 
 read_settings()
