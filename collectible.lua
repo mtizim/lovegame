@@ -37,7 +37,7 @@ function collectibleClass:update(dt)
         self:collision_check()
         self.alpha = math.min(self.alpha + settings.collectible_fadein * dt, 1)
     else self:fadeStep(dt) end 
-    if self.alpha <= 0 and self.chomped then self:destroy() end   
+    if self.alpha <= 0 and self.chomped then self:destroy() end
 end
 
 function collectibleClass:draw()

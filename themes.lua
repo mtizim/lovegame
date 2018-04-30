@@ -19,6 +19,8 @@ themes = {
         background = black,
         collectible = blue,
         score = white_transparent,
+
+        menu_button = white,
     },
     white_red =
     {
@@ -31,10 +33,12 @@ themes = {
         background = yellowish_white,
         collectible = blue_less,
         score = black_transparent,
+
+        menu_button = red,
     }
 }
 
 theme_names = {
     "black_red",
-    "white_red"
+    "white_red",
 }

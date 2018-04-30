@@ -6,15 +6,13 @@ function laserClass:init( x, y, r,
                           width, height,
                           width_exploded, height_exploded,
                           time, remain_time,
-                          color_array, color_array_exploded,
                           collider)
     self.x, self.y = x, y
     self.rotation = r
     self.width, self.height = width, height
     self.width_exploded, self.height_exploded = width_exploded, height_exploded
     
-    self.color_array = color_array
-    self.color_array_exploded = color_array_exploded
+   
 
     self.time_initial = time
     self.time_left = time
@@ -54,6 +52,10 @@ end
 
 -- Ticks the timer and explodes or destroys the laser
 function laserClass:update(dt)
+
+    self.color_array = themes[settings.theme].laser
+    self.color_array_exploded = themes[settings.theme].laser_exploded
+
     self.time_left = self.time_left - dt
     -- so that minimum value is 0
     if self.time_left<0 and not self.exploded then self.time_left = 0 end
@@ -83,7 +85,7 @@ end
 
 --Checks if the laser collides with the objects
 function laserClass:player_collision(player)
-    if self.hc_object:collidesWith(player.hc_object) then
+    if player and self.hc_object:collidesWith(player.hc_object) then
         player.alive = false
     end
 end

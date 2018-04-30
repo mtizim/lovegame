@@ -1,4 +1,4 @@
-gamecontrollerClass = Class()
+gamecontrollerClass = Class("Game controller")
 
 function gamecontrollerClass:init(size,multiplier)
     self.size = size

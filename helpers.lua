@@ -7,7 +7,7 @@ function node:init(value,next)
     self.value ,self.next = value,next
 end
 
-linkedlistClass = Class()
+linkedlistClass = Class("linked list")
 
 
 function linkedlistClass:init(value)

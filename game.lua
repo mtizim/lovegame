@@ -1,4 +1,4 @@
-gameClass = Class()
+gameClass = Class("game")
 
 function gameClass:init()
     --initializing appropriate things
@@ -28,7 +28,7 @@ function gameClass:init()
                                0, 0, settings.player_size, 
                                settings.player_maxspeed,settings.walldamp,
                                self.collider)    
-
+    self.paused = false
 end
 
 --Calculates the random position pointing at the player
@@ -43,7 +43,6 @@ function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
                              width,height,
                              width, height * 100,
                              time,r_time,
-                             color,explodedcolor,
                              self.collider)
     self.enemies:add(laser)
 end
@@ -123,14 +122,65 @@ end
 --Updates appropriate objects
 function gameClass:update(dt)
     --joystick reaction
-    if self.player.alive then
-        self:update_normal(dt)
-    else
-        self.game_controller.pressed.bool = false
-        self:update_gameover(dt)
+    -- if something is stopping the drawing or if the game is really slow
+    if dt > 0.2 then 
+        self:pause()
+        return
     end
-    --needs to be called last!!!
-    self:update_touch()
+    if not self.paused then
+        if self.player.alive then
+            self:update_normal(dt)
+        else
+            self.game_controller.pressed.bool = false
+            self:update_gameover(dt)
+        end
+        --needs to be called last!!!
+        self:update_touch()
+    end
+
+    if self.pause_button then
+        self.main_button:update(dt)
+        self.pause_button:update(dt)
+    end
+end
+
+function unpause_game()
+    local elf = application.current
+    elf.paused = false
+    elf.pause_button = nil
+    elf.main_button = nil
+end
+
+function go_to_menu()
+    application:change_scene_to(main_menuClass())
+end
+
+function gameClass:pause()
+    self.paused = true
+    self.pause_button = buttonClass(window_width/2 -
+                    unpause_font:getWidth(settings.unpause_text)/2,
+                            window_height/2 -
+                    settings.unpause_font_size * 0.5,              
+                            settings.unpause_text,
+                            unpause_font,
+                            1,
+                            unpause_game,
+                            1,
+                            window_width/2 -
+                    unpause_font:getWidth(settings.unpause_text)/2,
+                            window_height/2 -
+                    settings.unpause_font_size * 0.5
+                            )
+    self.main_button = buttonClass(settings.paused_main_x,
+                            settings.paused_main_y,              
+                            settings.paused_main_text,
+                            paused_main_font,
+                            1,
+                            go_to_menu,
+                            1,
+                            settings.paused_main_x,
+                            settings.paused_main_y
+                            )                
 end
 
 --Self explanatory
@@ -145,14 +195,16 @@ function gameClass:destroy()
 end
 
 function gameClass:drawScore()
+    love.graphics.setFont(score_font)
     local score = self.player.score
     -- how long the score is
     local size = math.floor(math.log10(score)) + 1
     local x, y = window_width/2, - 0.1 * window_height
-    local width = font:getWidth(score)
+    local width = score_font:getWidth(score)
     x = x - width / 2
     love.graphics.setColor(self.theme.score)
     love.graphics.print(score,x,y)
+    
 end
 
 --Draws appropriate objects
@@ -167,4 +219,9 @@ function gameClass:draw()
                               self.theme.controller,settings.controller_line,
                               self.theme.controller_alpha)
     self:draw_boundaries(self.theme.boundaries)
+
+    if self.pause_button then
+        self.pause_button:draw()
+        self.main_button:draw()
+    end
 end

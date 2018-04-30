@@ -2,24 +2,25 @@ Class = require("dependencies.30log")
 hc = require("dependencies.hardoncollider")
 -- inspect = require("inspect")
 
+osString = love.system.getOS( )
+window_width, window_height = love.graphics.getDimensions()
+
 
 require("app")
 require("game")
 require("gameController")
 require("collectible")
 require("helpers")
+require("game_background")
+require("main_menu")
+require("button")
 require("laser")
 require("player")
 require("themes")
+require("keypressed")
 require("settings")
 math.randomseed(os.time())
 
-osString = love.system.getOS( )
-window_width, window_height = love.graphics.getDimensions()
-
-settings.font_size = window_height 
-font = love.graphics.newFont("Geo.otf",settings.font_size)
-love.graphics.setFont(font)
 
 DEBUG = false
 STEPTIME = 0
