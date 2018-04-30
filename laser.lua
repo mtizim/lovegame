@@ -16,6 +16,7 @@ function laserClass:init( x, y, r,
     self.color_array = color_array
     self.color_array_exploded = color_array_exploded
 
+    self.time_initial = time
     self.time_left = time
     self.remain_time = remain_time
     
@@ -23,7 +24,7 @@ function laserClass:init( x, y, r,
     self.destroyed = false
     
     self.collider = collider
-    self.alpha = 1
+    self.alpha = 0
     self.hc_object = nil
 end
 
@@ -100,7 +101,10 @@ end
 
 --Self explanatory
 function laserClass:draw_normal()
-    love.graphics.setColor(self.color_array)
+    -- fade in,linear
+    self.alpha = 1 - (self.time_left / self.time_initial)
+    love.graphics.setColor(self.color_array[1],self.color_array[2],
+                           self.color_array[3],self.alpha)
     rotatedRectangle("fill", self.x - self.width/2,
                              self.y - self.height/2,
                              self.width, self.height, self.rotation)

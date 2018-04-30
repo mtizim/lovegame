@@ -5,6 +5,7 @@ function gameClass:init()
     
     local x, y = window_width/2, window_height/2
     self.enemies = linkedlistClass()
+    self.collectibles = linkedlistClass()
     self.collider = hc.new()
     self.pressed_before_bool = false
     self.game_controller = gamecontrollerClass(settings.controller_size,
@@ -22,11 +23,11 @@ function gameClass:init()
     self.bounding_box = { settings.offset, window_height - settings.offset,
                           settings.offset, window_width  - settings.offset}
     self.player = playerClass( x, y,
-                               settings.player_start_vx, settings.player_start_vy,
+                               settings.player_start_vx,
+                               settings.player_start_vy,
                                0, 0, settings.player_size, 
                                settings.player_maxspeed,settings.walldamp,
-                               self.collider)
-    
+                               self.collider)    
 
 end
 
@@ -35,8 +36,9 @@ end
 function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
     local x = math.random( 2 * self.offset, window_width - 2 * self.offset )
     local y = math.random( 2 * self.offset, window_height - 2 * self.offset)
-    local r = math.atan2( x - self.player.x, y - self.player.y) + math.random() * settings.laser_random_r_deviation * 2 
-                                                                  - settings.laser_random_r_deviation
+    local r = math.atan2( x - self.player.x, y - self.player.y)
+                          + math.random() * settings.laser_random_r_deviation*2
+                          - settings.laser_random_r_deviation
     local laser = laserClass(x,y,r,
                              width,height,
                              width, height * 100,
@@ -56,25 +58,44 @@ function gameClass:draw_boundaries(colorArray)
     love.graphics.rectangle("fill",window_width,0,-self.offset,window_height)
 end
 
-function gameClass:update_normal(dt,ax,ay)
-    self.player.ax = ax or 0 
+function gameClass:update_normal(dt)
+
+    --player
+
+    local ax,ay = self.game_controller:update()
+    self.player.ax = ax or 0
     self.player.ay = ay or 0
     self.player:update(dt,self.bounding_box)
+
+    -- lasers
+
     -- so that a laser is only spawned once every
     --                                 timer seconds
     self.laser_every_timer = self.laser_every_timer + dt
     if self.laser_every_timer >= self.laser_every then
         collectgarbage()
-        self:new_laser(settings.laser_width,settings.laser_height,self.laser_stay,self.laser_disappear,
-                    self.theme.laser,self.theme.laser_exploded)
+        self:new_laser(settings.laser_width,settings.laser_height,
+                       self.laser_stay,self.laser_disappear,
+                       self.theme.laser,self.theme.laser_exploded)
         self.laser_every_timer = 0
     end
     -- update all lasers and remove destroyed ones
     self.enemies:update_forall(dt)
-    self.enemies:remove_destroyed()
+
+    -- collectibles
+    self.collectibles:update_forall(dt)
+    if self.collectibles.length == 0 then
+        local x = math.random(2*self.offset, window_width - 2*self.offset)
+        local y = math.random(2*self.offset, window_height - 2*self.offset)
+        local new = collectibleClass(x, y,
+                                     settings.collectible_size,
+                                     self.theme.collectible,
+                                     self.collider)
+        self.collectibles:add(new)
+    end
 end
 
-function gameClass:update_gameover(dt,ax,ay)
+function gameClass:update_gameover(dt)
     -- display score
     -- maybe time played
     -- max score but i have to implement that
@@ -103,8 +124,7 @@ end
 function gameClass:update(dt)
     --joystick reaction
     if self.player.alive then
-        local ax,ay = self.game_controller:update()
-        self:update_normal(dt,ax,ay)
+        self:update_normal(dt)
     else
         self.game_controller.pressed.bool = false
         self:update_gameover(dt)
@@ -124,12 +144,26 @@ function gameClass:destroy()
     self.collider = nil
 end
 
+function gameClass:drawScore()
+    local score = self.player.score
+    -- how long the score is
+    local size = math.floor(math.log10(score)) + 1
+    local x, y = window_width/2, - 0.1 * window_height
+    local width = font:getWidth(score)
+    x = x - width / 2
+    love.graphics.setColor(self.theme.score)
+    love.graphics.print(score,x,y)
+end
+
 --Draws appropriate objects
 function gameClass:draw()
     self:draw_background()
+    self:drawScore()
+    self.collectibles:draw_forall()
     self.player:draw(self.theme.player)
     self.enemies:draw_forall()
-    self.game_controller:draw(self.theme.controller,settings.controller_dotradius,
+    self.game_controller:draw(self.theme.controller,
+                              settings.controller_dotradius,
                               self.theme.controller,settings.controller_line,
                               self.theme.controller_alpha)
     self:draw_boundaries(self.theme.boundaries)

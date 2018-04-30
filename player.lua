@@ -15,6 +15,7 @@ function playerClass:init( x, y,
     self.walldamp = walldamp
     self.collider = collider
     self.hc_object = collider:circle(x,y,size)
+    self.score = 0
 end
 
 --Bounces off the wall
@@ -64,11 +65,11 @@ end
 
 --Updates the whole thing
 function playerClass:update(dt,box_array)
-    self:move(self.x + self.vx,
-              self.y + self.vy)
+    self:move(self.x + self.vx * dt,
+              self.y + self.vy * dt)
     self.hc_object:moveTo(self.x, self.y)
-    self.vx = self.vx + self.ax
-    self.vy = self.vy + self.ay
+    self.vx = self.vx + self.ax * dt
+    self.vy = self.vy + self.ay * dt
     self:normalize_speed()
     self:check_bounds_rect_bounce(box_array)
     

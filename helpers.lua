@@ -16,6 +16,7 @@ function linkedlistClass:init(value)
         self.tail = self.head
         self.length = 1
     end
+    self.length = 0
 end
 
 function linkedlistClass:at(i)
@@ -26,12 +27,26 @@ function linkedlistClass:at(i)
     return current
 end
 
+-- calls #update on all values which are not destroyed 
+--  and removes the destroyed nodes from the list
 function linkedlistClass:update_forall(dt)
     local current
     if self.head then
         current = self.head
         while current do
-            current.value:update(dt)
+            if current.value.destroyed then
+                if current == self.head then
+                    self.head = self.head.next
+                    current.value = nil
+                else 
+                    before.next = current.next
+                    current.value = nil
+                end
+                self.length = self.length - 1
+            else
+                current.value:update(dt)
+            end
+            before = current
             current = current.next
         end
     end
@@ -46,28 +61,6 @@ function linkedlistClass:remove(i)
     -- so it skips the ith node
     before.next = before.next.next
     self.length = self.length -1
-end
-
-function linkedlistClass:remove_destroyed()
-    local current = self.head
-    local before
-    if self.length then
-        for i=1,self.length do
-            if current.value.destroyed then
-                if current == self.head then
-                    self.head = self.head.next
-                    current.value = nil
-                else 
-                    before.next = current.next
-                    current.value = nil
-                end
-                self.length = self.length - 1
-            end
-            before = current
-            current = current.next
-        end
-        self.tail.next = nil
-    end
 end
 
 function linkedlistClass:draw_forall(funct)
@@ -94,14 +87,6 @@ function linkedlistClass:add(value)
     self.tail.next = node(value,nil)
     self.tail = self.tail.next
     self.length = self.length + 1
-end
-
---Self explanatory
-function check_collision(object_a,object_b)
-    if object_a and object_b then
-        return object_a:collidesWith(object_b)
-    end
-    return false
 end
 
 -- Love2d doesn't have this for some reason
