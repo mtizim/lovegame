@@ -8,6 +8,7 @@ window_width, window_height = love.graphics.getDimensions()
 
 require("app")
 require("game")
+require("gameover")
 require("gameController")
 require("collectible")
 require("helpers")
@@ -22,6 +23,7 @@ require("settings")
 
 math.randomseed(os.time())
 
+function empty() end
 
 DEBUG = false
 STEPTIME = 0

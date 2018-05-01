@@ -104,3 +104,8 @@ function rotatedRectangle(mode, x, y, w, h, r)
       love.graphics.pop()
     love.graphics.pop()
 end
+
+function reset_highscore()
+    settings.highscore = 0
+    save_settings()
+end

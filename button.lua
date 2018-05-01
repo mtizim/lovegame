@@ -15,6 +15,7 @@ function buttonClass:init(x,y,text,font,alpha,action,
     self.dest_time = dest_time
     self.dest_x = dest_x
     self.dest_y = dest_y
+    self.dest_x_preserve = dest_x
     self.time = 0
     self.enabled = true
 end
@@ -32,6 +33,8 @@ function buttonClass:revert()
     local t_begin = {self.begin[1],self.begin[2]}
     self.begin = {self.dest_x,self.dest_y}
     self.dest_x,self.dest_y = t_begin[1],t_begin[2]
+    self.dest_x_preserve = self.dest_x
+    
 end
 
 function buttonClass:update(dt)
@@ -58,15 +61,23 @@ function buttonClass:update(dt)
     if self.time < self.dest_time then
         self:interpolate(dt)
     else
+        self.time = self.dest_time + 1
         self.x = self.dest_x
         self.y = self.dest_y
     end
 end
 
-function buttonClass:draw()
-    if self.color then
+function buttonClass:draw(givencolor)
+    if self.color or givencolor then
+        if givencolor then self.color = givencolor end
         love.graphics.setColor(self.color[1],self.color[2],self.color[3],self.alpha)
         love.graphics.setFont(self.font)
         love.graphics.print(self.text,self.x,self.y)
     end
 end
+
+
+function buttonClass:update_textshift()
+    self.dest_x = self.dest_x_preserve - self.font:getWidth(self.text)
+end
+

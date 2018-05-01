@@ -29,6 +29,7 @@ function gameClass:init()
                                settings.player_maxspeed,settings.walldamp,
                                self.collider)    
     self.paused = false
+    self.highscore_bool = false
 end
 
 --Calculates the random position pointing at the player
@@ -94,23 +95,6 @@ function gameClass:update_normal(dt)
     end
 end
 
-function gameClass:update_gameover(dt)
-    -- display score
-    -- maybe time played
-    -- max score but i have to implement that
-    -- definitely need to save max score here
-    local pressed
-    if osString == "Windows " or osString =="Linux" or osString =="OS X" then
-        pressed = love.mouse.isDown(1)
-    else
-        pressed = not not first -- cast too boolean
-    end
-
-    if pressed and not self.pressed_before_bool then
-        application:restart_game()
-    end
-end
-
 function gameClass:update_touch()
     if osString == "Windows " or osString =="Linux" or osString =="OS X" then
         self.pressed_before_bool = love.mouse.isDown(1)
@@ -138,6 +122,7 @@ function gameClass:update(dt)
         self:update_touch()
     end
 
+    
     if self.pause_button then
         self.main_button:update(dt)
         self.pause_button:update(dt)
@@ -219,7 +204,9 @@ function gameClass:draw()
                               self.theme.controller,settings.controller_line,
                               self.theme.controller_alpha)
     self:draw_boundaries(self.theme.boundaries)
-
+    if not self.player.alive then
+        self:draw_gameover()
+    end
     if self.pause_button then
         self.pause_button:draw()
         self.main_button:draw()

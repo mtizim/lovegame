@@ -12,7 +12,6 @@ makelove:
 		cp -r dependencies/* pak/dependencies/
 		cp *.lua pak/
 		cp *.otf pak/
-		cp *.txt pak/
 		cd pak/ ; \
 		zip -9 -r $(shell pwd)/game.love .
 
