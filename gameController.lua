@@ -65,7 +65,7 @@ function gamecontrollerClass:update(dt)
 end
 
 function gamecontrollerClass:draw(inner_circle,size,outer_circle,line_width,alpha)
-    if self.pressed.bool then
+    if settings.draw_controller and self.pressed.bool then
         --inner
         love.graphics.setColor(inner_circle[1],inner_circle[2],inner_circle[3],alpha)
         love.graphics.circle("fill",self.pressed.x,self.pressed.y,size)

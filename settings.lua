@@ -1,5 +1,6 @@
 -- global
 -- it's a collection of magic values 
+print(window_height,window_width)
 settings = {
     --should be constants
     score_font_size = 700,
@@ -9,7 +10,8 @@ settings = {
     menu_buttons_first_y = 50,
     menu_start_text = "start",
     menu_settings_text = "settings",
-    menu_controller_size_text = "cursor size",
+    menu_controller_size_text = "joy size",
+    menu_controller_text = "joy",
     menu_start_behind = -200,
     menu_travel_time = 0.8,
 
@@ -17,10 +19,12 @@ settings = {
     menu_settings_behind = window_width + 200,
     menu_settings_first_y = window_height - 100,
     menu_settings_x = window_width - 250,
+    menu_settings_on_text = "on",
+    menu_settings_off_text= "off",
+    menu_settings_spacing = 50,
 
     menu_themes_text = "theme",
-    menu_themes_spacing_multiplier = 5.5,
-
+    
     unpause_text = "stopped",
     unpause_font_size = 60,
 
@@ -80,6 +84,7 @@ function read_settings()
         end
         settings.theme_number = tonumber(valtab[1])
         settings.controller_size = tonumber(valtab[2])
+        settings.draw_controller = (tostring(valtab[3]) == "true")
     file = nil
     settings.theme = theme_names[settings.theme_number]
 end
@@ -91,6 +96,9 @@ function save_settings()
         file:write("\n")
     file:write(settings.controller_size)
         file:write("\n")
+    file:write(tostring(settings.draw_controller))
+        file:write("\n")
+    
     file = nil
 end
 

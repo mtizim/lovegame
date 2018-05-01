@@ -27,6 +27,13 @@ function buttonClass:interpolate(dt)
     self.time = self.time + dt
 end
 
+function buttonClass:revert()
+    self.time = 0
+    local t_begin = {self.begin[1],self.begin[2]}
+    self.begin = {self.dest_x,self.dest_y}
+    self.dest_x,self.dest_y = t_begin[1],t_begin[2]
+end
+
 function buttonClass:update(dt)
     self.color = themes[settings.theme].menu_button
     local press_state
@@ -37,7 +44,9 @@ function buttonClass:update(dt)
         press_x, press_y = love.mouse.getPosition()
     else
         press_state = not not first
-        press_x, press_y = love.touch.getPosition(first)
+        if first then
+            press_x, press_y = love.touch.getPosition(first)
+        end
     end
 
 

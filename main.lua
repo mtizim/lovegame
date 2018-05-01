@@ -19,6 +19,7 @@ require("player")
 require("themes")
 require("keypressed")
 require("settings")
+
 math.randomseed(os.time())
 
 

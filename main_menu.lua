@@ -30,16 +30,16 @@ function main_menuClass:init()
                             )
 
     self.themes = buttonClass(settings.menu_start_behind,
-                            settings.menu_buttons_first_y +
-            settings.menu_themes_spacing_multiplier * settings.menu_buttons_spacing,               
+                            window_height -
+                      settings.menu_buttons_spacing,               
                             settings.menu_themes_text,
                             menu_button_font,
                             1,
                             cycle_themes,
                             settings.menu_travel_time,
                             settings.menu_buttons_x,
-                            settings.menu_buttons_first_y +
-            settings.menu_themes_spacing_multiplier * settings.menu_buttons_spacing
+                            window_height -
+                      settings.menu_buttons_spacing
                             )
 
 end
@@ -81,6 +81,42 @@ function toggle_settings()
                             settings.menu_settings_x,
                             settings.menu_settings_first_y
                             )
+        local controller_state = ""
+        if settings.draw_controller then
+            controller_state = settings.menu_settings_on_text
+        else
+            controller_state = settings.menu_settings_off_text
+        end
+        elf.controller = buttonClass(settings.menu_settings_behind,
+                            settings.menu_settings_first_y +
+                        settings.menu_settings_spacing,               
+                            settings.menu_controller_text .. " " .. 
+                        controller_state,
+                            menu_settings_font,
+                            1,
+                            toggle_draw_controller,
+                            settings.menu_travel_time,
+                            settings.menu_settings_x,
+                            settings.menu_settings_first_y +
+                        settings.menu_settings_spacing
+                            )
+    end
+end
+
+function toggle_draw_controller()
+    if not button_cooldown or button_cooldown < 0 then
+        button_cooldown = 0.3
+        settings.draw_controller = not settings.draw_controller
+        save_settings()
+        local controller_state = ""
+        if settings.draw_controller then
+            controller_state = settings.menu_settings_on_text
+        else
+            controller_state = settings.menu_settings_off_text
+        end
+        application.current.controller.text = 
+            settings.menu_controller_text .. " " .. 
+            controller_state
     end
 end
 
@@ -105,18 +141,10 @@ end
 
 function main_menuClass:revert_settings()
     self.settings_bool = false
-    self.controller_size = buttonClass(settings.menu_settings_x,
-                            settings.menu_settings_first_y,              
-                            settings.menu_controller_size_text .. "  " ..
-                        settings.controller_size,
-                            menu_settings_font,
-                            1,
-                            change_controller_size,
-                            settings.menu_travel_time,
-                            settings.menu_settings_behind,
-                            settings.menu_settings_first_y
-                            )
+    self.controller_size:revert()
+    self.controller:revert()
     self.controller_size.enabled = false          
+    self.controller.enabled = false
 end
     
 
@@ -125,7 +153,10 @@ function main_menuClass:draw()
     self.start:draw()
     self.settings:draw()
     self.themes:draw()
-    if self.controller_size then self.controller_size:draw() end
+    if self.controller_size then 
+        self.controller_size:draw()
+        self.controller:draw()
+    end
 end
 
 function main_menuClass:update(dt)
@@ -136,5 +167,8 @@ function main_menuClass:update(dt)
     self.start:update(dt)
     self.settings:update(dt)
     self.themes:update(dt)
-    if self.controller_size then self.controller_size:update(dt) end
+    if self.controller_size then
+        self.controller_size:update(dt)
+        self.controller:update(dt)
+    end
 end
