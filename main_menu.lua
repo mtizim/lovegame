@@ -84,7 +84,7 @@ function toggle_settings()
     local elf = application.current
     if not elf.settings_bool then
         --fuck style here
-        self.remove_highscore_counter = settings.remove_highscore_counter
+        elf.remove_highscore_counter = settings.remove_highscore_counter
         elf.settings_bool = true
         elf.controller_size = buttonClass(settings.menu_settings_behind,
                             settings.menu_settings_first_y,               

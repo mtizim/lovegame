@@ -18,26 +18,26 @@ function gamecontrollerClass:update(dt)
             self.pressed.bool = true
             -- position at which the mouse was first pressed
             self.pressed.x,self.pressed.y = love.mouse.getPosition()
-            return 0,0
+            return 0,0,nil
         elseif mouse_state then
             local x,y = love.mouse.getPosition()
             -- deviations from the center of the first press
             local delta_y,delta_x = y - self.pressed.y,x - self.pressed.x
             -- conversion into radial coordinates
             local theta = math.atan2(delta_x,delta_y)
-            -- so that the max vaule of r is for deviation of radius size
+            -- r is percentage of the max distance from the middle point
             local r = math.min(math.sqrt( delta_x*delta_x + delta_y*delta_y ),
-                               self.size)
+                               self.size) / self.size
             -- then return of appropriate values given the radial coords
             -- changing into cartesian
             local ax,ay = math.sin(theta)*r,math.cos(theta)*r
             -- adjustments
-            local ax = ax * self.multiplier / self.size
-            local ay = ay * self.multiplier / self.size
-            return ax,ay
+            local ax = ax * self.multiplier
+            local ay = ay * self.multiplier
+            return ax,ay,r
         elseif not mouse_state then
             self.pressed.bool = false
-            return nil,nil
+            return nil,nil,nil
         end
     -- android/ios
     -- same things as above won't bother commenting twice
@@ -46,20 +46,21 @@ function gamecontrollerClass:update(dt)
         if (not self.pressed.bool) and mouse_state then
             self.pressed.bool = true
             self.pressed.x,self.pressed.y = love.touch.getPosition(first)
-            return 0,0
+            return 0,0,nil
         elseif mouse_state then
             local x,y = love.touch.getPosition(first)
             local delta_y,delta_x = y - self.pressed.y,x - self.pressed.x
             local theta = math.atan2(delta_x,delta_y)
             local r = math.min(math.sqrt( delta_x*delta_x + delta_y*delta_y ),
-                                          self.size)
+                                          self.size) / self.size
+            -- r is a percentage of the max radius
             local ax,ay = math.sin(theta)*r,math.cos(theta)*r
-            ax = ax * self.multiplier / self.size
-            ay = ay * self.multiplier / self.size
-            return ax,ay
+            ay = ay * self.multiplier
+            ax = ax * self.multiplier
+            return ax,ay,r
         elseif not mouse_state then
             self.pressed.bool = false
-            return 0,0
+            return 0,0,nil
         end
     end
 end

@@ -62,7 +62,11 @@ function gameClass:update_normal(dt)
 
     --player
 
-    local ax,ay = self.game_controller:update()
+    local ax,ay,r = self.game_controller:update()
+    if r then 
+        print (r)
+        self.player.maxspeed = settings.player_maxspeed * r
+    end
     self.player.ax = ax or 0
     self.player.ay = ay or 0
     self.player:update(dt,self.bounding_box)

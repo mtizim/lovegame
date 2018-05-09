@@ -61,7 +61,7 @@ settings = {
     laser_exploded_width_multiplier = 0.3, --reduces the actual collision box
     laser_every_base = 0.7,
 
-    controller_mul = 4000, -- should be about 10 * maxspeed
+    controller_mul = 5000, -- should be about 10 * maxspeed
     controller_dotradius = 5, -- 10 for mobile
     controller_line = 1.2,  -- ok for mobile
     controller_size_max = 121,

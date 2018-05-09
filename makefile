@@ -17,8 +17,6 @@ makelove:
 
 apk:	
 		rm -rf ${APK_DIR}/love_decoded
-		#idk why but it needs to be removed #OR CAN BE LEFT LUL
-		# rm ~/.local/share/apktool/framework/1.apk
 		cd ${APK_DIR}/ ; \
 			apktool d -fs -o love_decoded love-11.1-android.apk
 		mkdir -p ${APK_DIR}/love_decoded/assets/
