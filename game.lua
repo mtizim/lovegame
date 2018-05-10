@@ -30,11 +30,12 @@ function gameClass:init()
                                self.collider)    
     self.paused = false
     self.highscore_bool = false
+    self.inverted_laser_timetonext = settings.inverted_laser_delay
 end
 
 --Calculates the random position pointing at the player
 --adds the newly made laser to the list
-function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
+function gameClass:new_laser(width,height,time,r_time)
     local x = math.random( 2 * self.offset, window_width - 2 * self.offset )
     local y = math.random( 2 * self.offset, window_height - 2 * self.offset)
     local r = math.atan2( x - self.player.x, y - self.player.y)
@@ -45,6 +46,15 @@ function gameClass:new_laser(width,height,time,r_time,color,explodedcolor)
                              width, height * 100,
                              time,r_time,
                              self.collider)
+    self.enemies:add(laser)
+end
+
+function gameClass:new_inverted_laser(time,r_time)
+    local displ = settings.inverted_laser_displ
+    local x = math.random( window_width / displ, window_width * (1 - 1/displ))
+    local y = math.random( window_height / displ ,window_height * (1 - 1/displ))
+    local r = math.pi * 2 * math.random() -- just a random rotation
+    local laser = inverted_laserClass(x,y,r,time,r_time,self.collider)
     self.enemies:add(laser)
 end
 
@@ -64,25 +74,38 @@ function gameClass:update_normal(dt)
 
     local ax,ay,r = self.game_controller:update()
     if r then 
-        print (r)
         self.player.maxspeed = settings.player_maxspeed * r
     end
     self.player.ax = ax or 0
     self.player.ay = ay or 0
     self.player:update(dt,self.bounding_box)
 
-    -- lasers
-
-    -- so that a laser is only spawned once every
-    --                                 timer seconds
+    -- timers    
+    self.inverted_laser_timetonext = math.max(-1,self.inverted_laser_timetonext - dt)
     self.laser_every_timer = self.laser_every_timer + dt
+    
+    -- lasers
+    
     if self.laser_every_timer >= self.laser_every then
+        self:adjust_laser_timer()
         collectgarbage()
         self:new_laser(settings.laser_width,settings.laser_height,
-                       self.laser_stay,self.laser_disappear,
-                       self.theme.laser,self.theme.laser_exploded)
+                       settings.laser_stay_base,
+                       settings.laser_disappear_base)
         self.laser_every_timer = 0
+
+        -- inverted spawn with normal
+        if self.player.score > settings.inverted_laser_min_score and
+                math.random() < settings.inverted_laser_prob and
+                self.inverted_laser_timetonext <= 0 then
+            self.inverted_laser_timetonext = settings.inverted_laser_delay
+            self:new_inverted_laser(settings.inverted_laser_stay,
+                                settings.laser_disappear_base)
+        end
+
     end
+
+
     -- update all lasers and remove destroyed ones
     self.enemies:update_forall(dt)
 
@@ -97,6 +120,11 @@ function gameClass:update_normal(dt)
                                      self.collider)
         self.collectibles:add(new)
     end
+end
+
+function gameClass:adjust_laser_timer()
+    self.laser_every = math.max(- math.log(0.3 * self.player.score + 4) + 2.8,
+        settings.laser_every_min)
 end
 
 function gameClass:update_touch()

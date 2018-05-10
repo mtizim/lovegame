@@ -53,6 +53,8 @@ settings = {
     walldamp = 0.4,
 
     laser_stay_base = 1.5,
+    -- there is a laser tim adjusting function in game.lua
+    -- won't parametrize it here but remember about it being there
     laser_width = 20, --25 for mobile?
     laser_height = 100, -- 150 for mobile?
     laser_random_r_deviation = math.pi / 23,  -- +- that
@@ -60,6 +62,19 @@ settings = {
     laser_disappear_base = 0.3,
     laser_exploded_width_multiplier = 0.3, --reduces the actual collision box
     laser_every_base = 0.7,
+    laser_every_min = 0.6,
+
+    inverted_laser_delay = 2,
+    -- to 2/3 screen width and heigh 
+    -- 3 means that the random bounding box is from 1/3 screen width and height
+    inverted_laser_stay = 3,
+    inverted_laser_min_score = 10,
+    inverted_laser_prob = 0.1, -- chance to spawn on normal laser spawn
+    inverted_laser_displ = 3,
+    inverted_laser_gap = 200,
+    inverted_laser_width = 1000,
+    inverted_laser_length = 2000,
+
 
     controller_mul = 5000, -- should be about 10 * maxspeed
     controller_dotradius = 5, -- 10 for mobile
@@ -71,12 +86,14 @@ settings = {
                                  -- so it's lighter
     collectible_fadein = 2, --same as above                                 
     collectible_size = 7,
-    --backup
+
+    --defaults
     theme_number = 1,
     controller_size = 60,
     draw_controller = true,
     highscore = 0,
-
+    
+    -- main font
     font = "Geo.otf",
 }
 
