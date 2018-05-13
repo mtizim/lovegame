@@ -78,5 +78,7 @@ end
 -- Draws the player
 function playerClass:draw(color_array)
     love.graphics.setColor(color_array)
-    love.graphics.circle("fill",self.x ,self.y , self.size)
+    -- if self.hc_object then self.hc_object:draw() end
+    local rot = math.atan2(self.vx,self.vy)
+    player_draw:draw(self.x,self.y,rot,self.size)
 end

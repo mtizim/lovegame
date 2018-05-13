@@ -7,7 +7,8 @@ function collectibleClass:init(x,y,
     self.y = y
     self.size = size
     self.collider = collider
-    self.hc_object = collider:circle(x,y,size)
+    self.hc_object = collider:circle(x,y,
+            size + 2*(settings.player_size - settings.player_collision_size))
     self.destroyed = false
     self.chomped = false
     self.alpha = 0

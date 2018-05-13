@@ -21,7 +21,7 @@ function buttonClass:init(x,y,text,font,alpha,action,
 end
 
 function buttonClass:interpolate(dt)
-    self.x = self.begin[1] + 
+    self.x = self.begin[1] +
             (self.dest_x - self.begin[1])*self.time/self.dest_time
     self.y = self.begin[2] + 
             (self.dest_y - self.begin[2])*self.time/self.dest_time
@@ -29,6 +29,7 @@ function buttonClass:interpolate(dt)
 end
 
 function buttonClass:revert()
+    self.x,self.y = self.dest_x,self.dest_y
     self.time = 0
     local t_begin = {self.begin[1],self.begin[2]}
     self.begin = {self.dest_x,self.dest_y}

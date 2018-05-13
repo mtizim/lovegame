@@ -14,9 +14,14 @@ function escape_pressed()
             go_to_menu()
         end
     end
-    if application.current:instanceOf(main_menuClass) and
-        application.current.settings_bool then
+    if application.current:instanceOf(main_menuClass) then
+        if application.current.settings_bool then
             application.current:revert_settings()
+        end
+        if application.current.visual_menu then
+            application.current.visual_menu:revert()
+            application.current.themes:revert()
+        end
     end
 
 end

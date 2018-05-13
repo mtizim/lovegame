@@ -36,7 +36,7 @@ function main_menuClass:init()
                             settings.menu_themes_text,
                             menu_button_font,
                             1,
-                            cycle_themes,
+                            open_visual_menu,
                             settings.menu_travel_time,
                             settings.menu_buttons_x,
                             settings.menu_themes_y
@@ -50,7 +50,7 @@ function main_menuClass:init()
                             settings.gameover_first_score_y,              
                             gameover_highscore_text,
                             menu_button_font, --might be ok
-                            1,
+                            highscore_alpha,
                             empty,
                             settings.menu_travel_time,
                             settings.gameover_scores_x -
@@ -63,15 +63,15 @@ function start_game()
     application:restart_game()
 end
 
-function cycle_themes()
-    
+function open_visual_menu()
+    elf = application.current
     if not button_cooldown or button_cooldown < 0 then
         button_cooldown = settings.button_cooldown
-        settings.theme_number = ((settings.theme_number) % (#theme_names)) + 1
-        settings.theme = theme_names[settings.theme_number]
-        application.current.theme = settings.theme
-        update_themes()
-        save_settings()
+        elf.visual_menu = visual_menuClass(elf)
+        if elf.settings_bool then
+            -- elf:revert_settings()
+        end
+        elf.themes:revert()
     end
 end
 
@@ -209,6 +209,7 @@ function main_menuClass:draw()
     self.settings:draw()
     self.themes:draw()
     self.highscore:draw(themes[settings.theme].highscore)
+    if self.visual_menu then self.visual_menu:draw() end
     if self.controller_size then 
             self.controller_size:update_textshift()
         self.controller_size:draw()
@@ -238,6 +239,7 @@ function main_menuClass:update(dt)
     self.settings:update(dt)
     self.highscore:update(dt)
     self.themes:update(dt)
+    if self.visual_menu then self.visual_menu:update(dt) end
     if self.controller_size then
         self.controller_size:update(dt)
         self.controller:update(dt)

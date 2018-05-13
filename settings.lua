@@ -17,7 +17,7 @@ settings = {
     menu_settings_text = "settings",
     menu_controller_size_text = "joy size",
     menu_controller_text = "joy",
-    menu_start_behind = - window_width / 6,
+    menu_start_behind = - window_width / 3,
     menu_travel_time = 0.5,
 
     menu_settings_behind = window_width * 9/6 , --same as menu_start_behind
@@ -32,8 +32,15 @@ settings = {
     removed_highscore_text = "reset",
     button_cooldown = 0.3,
 
-    menu_themes_text = "theme",
+    menu_themes_text = "visual",
     menu_themes_y = window_height * 4/5                         - 15,
+    
+    visual_menu_first_x = window_width *0                       + 15,
+    visual_menu_btn_size = window_width /10,
+    visual_menu_btn_spacing =0,-- window_width / 200 ,
+    vixual_menu_btns_y = window_height - window_width/10        - 15,
+    pl_btn_travel_time = 0.3,
+    pl_btn_line_width = 2,
     
     gameover_scores_x = window_width * 50/52                    - 15,
     gameover_first_score_y = window_height * 1/20               + 15,
@@ -54,6 +61,8 @@ settings = {
     player_start_vy = 0,
     player_maxspeed = 250,
     walldamp = 0.4,
+
+    lineball_width = 1,
 
     laser_stay_base = 1.5,
     -- there is a laser tim adjusting function in game.lua
@@ -105,11 +114,11 @@ settings = {
     controller_size = 60,
     draw_controller = true,
     highscore = 0,
-    
+    player_fill_mode = "line",
+    player_model = "ball",
     -- main font
     font = "Geo.otf",
 }
-
 -- font things
 settings.score_font_size = window_height
 score_font=love.graphics.newFont(settings.font,settings.score_font_size)
@@ -135,6 +144,8 @@ function read_settings()
                 settings.controller_size = tonumber(valtab[2]) or settings.controller_size
                 settings.draw_controller = (tostring(valtab[3]) == "true") or settings.draw_controller
                 settings.highscore = tonumber(valtab[4]) or settings.highscore
+                settings.player_fill_mode = tostring(valtab[5] or settings.player_fill_mode)
+                settings.player_model = tostring(valtab[6] or settings.player_model)
             end
         file:close()
         file = nil
@@ -153,8 +164,10 @@ function save_settings()
         file:write("\n")
     file:write(tostring(settings.highscore or 0))
         file:write("\n")
-    
+    file:write(tostring(settings.player_fill_mode))
+        file:write("\n")
+    file:write(tostring(settings.player_model))
+        file:write("\n")
     file = nil
 end
-
 read_settings()

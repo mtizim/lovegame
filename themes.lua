@@ -22,6 +22,7 @@ themes = {
         collectible = blue,
         score = white_transparent,
         missile = white,
+        pl_btn_color = white,
 
         menu_button = white,
         beaten_highscore = golden,
@@ -40,6 +41,7 @@ themes = {
         collectible = blue_less,
         score = black_transparent,
         missile = red,
+        pl_btn_color = red,
 
         menu_button = red,
         beaten_highscore = black,

@@ -7,6 +7,9 @@ osString = love.system.getOS( )
 window_width, window_height = love.graphics.getDimensions()
 
 
+require("themes")
+require("settings")
+
 require("app")
 require("game")
 require("gameover")
@@ -14,15 +17,16 @@ require("gameController")
 require("collectible")
 require("helpers")
 require("game_background")
+require("change_player_button")
+require("visual_menu")
 require("main_menu")
 require("button")
 require("inverted_laser")
 require("missile")
 require("laser")
+require("player_draw")
 require("player")
-require("themes")
 require("keypressed")
-require("settings")
 
 math.randomseed(os.time())
 
@@ -49,7 +53,7 @@ end
 if DISPLAY_FRAMES then delta_time, total_time = 0 , 0 end
 
 function love.update(dt)
-
+    dtt = dt
     application:update(dt)
 
     
@@ -59,9 +63,14 @@ function love.update(dt)
         print(collectgarbage("count"))
     end
 end
-
+-- for the lulz
+-- xxxx = 0
 function love.draw()
-
+    -- for the lulz
+    -- xxxx = xxxx + 0.002
+    -- love.graphics.translate(window_width/2,window_height/2)
+    -- love.graphics.rotate(xxxx,window_height/2,window_width/2)
+    -- love.graphics.translate(-window_width/2,-window_height/2)
     application:draw()
 
 
