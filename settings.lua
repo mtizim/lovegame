@@ -41,6 +41,7 @@ settings = {
     vixual_menu_btns_y = window_height - window_width/10        - 15,
     pl_btn_travel_time = 0.3,
     pl_btn_line_width = 2,
+    themes_act_ypos = window_height * 5/6                       - 15,
     
     gameover_scores_x = window_width * 50/52                    - 15,
     gameover_first_score_y = window_height * 1/20               + 15,

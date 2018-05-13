@@ -23,22 +23,41 @@ function visual_menuClass:init(parent)
                                             y
                                             )
     end
+    self.theme_btn = buttonClass(settings.menu_settings_behind,
+                                settings.themes_act_ypos,
+                                theme_names[settings.theme_number]
+                                menu_settings_font,
+                                1,
+                                cycle_themes,
+                                settings.menu_travel_time,
+                                settings.menu_settings_x,
+                                settings.themes_act_ypos
+                                )
+    self.theme_btn:update_textshift()
+end
+
+function cycle_themes()
+    settings.theme_number = (settings.theme_number + 1) % #theme_names + 1
+    settings.theme = theme_names[settings.theme_number]
 end
 
 function  visual_menuClass:draw()
     for i=1,#self.buttons do
         self.buttons[i]:draw(themes[settings.theme].pl_btn_color,self.size/4)
     end
+    self.theme_btn:draw()
 end
 
 function visual_menuClass:revert()
     for i=1,#self.buttons do
         self.buttons[i]:revert()
     end
+    self.theme_btn:revert()
 end
 
 function visual_menuClass:update(dt)
     for i=1,#self.buttons do
         self.buttons[i]:update(dt)
     end
+    self.theme_btn:update(dt)
 end
