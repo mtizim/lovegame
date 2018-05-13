@@ -27,10 +27,10 @@ function missileClass:init( x, y,
     local h = self.height
     local w = self.width 
     local incut = self.incut
-    self.hc_object = collider:polygon(  self.x, self.y + h,
-                                        self.x - w, self.y,
+    self.hc_object = collider:polygon(  self.x +w, self.y,
                                         self.x , self.y + incut,
-                                        self.x +w, self.y)
+                                        self.x - w, self.y,
+                                        self.x, self.y + h)
 end
 
 
@@ -104,7 +104,10 @@ function missileClass:draw()
     if not self.destroyed then
         local color = themes[settings.theme].missile
         love.graphics.setColor(color[1],color[2],color[3],self.alpha)
-        if self.hc_object then self.hc_object:draw() end
-        love.graphics.polygon("fill",self.hc_object._polygon:unpack())
+        -- if self.hc_object then self.hc_object:draw() end
+        local triangles = self.hc_object._polygon:triangulate()
+        love.graphics.polygon("fill",triangles[1]:unpack())
+        love.graphics.polygon("fill",triangles[2]:unpack())
+
     end
 end

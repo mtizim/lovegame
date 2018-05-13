@@ -49,6 +49,7 @@ settings = {
 
     offset = 15, --15 for mobile
     player_size = 10,
+    player_collision_size = 5,
     player_start_vx = 0,
     player_start_vy = 0,
     player_maxspeed = 250,
@@ -62,28 +63,28 @@ settings = {
     laser_random_r_deviation = math.pi / 23,  -- +- that
     laser_collision_timer = 0.02,
     laser_disappear_base = 0.3,
-    laser_exploded_width_red = 7, --reduces the actual collision box by x
+    laser_exploded_width_red = 0, --reduces the actual collision box by x
     laser_every_base = 1.5,
     laser_every_min = 0.8,
 
-    inverted_laser_delay = 5,
+    inverted_laser_delay = 2,
     -- to 2/3 screen width and height
     -- 3 means that the random bounding box is from 1/3 screen width and height
-    inverted_laser_stay = 3,
+    inverted_laser_stay = 2,
     inverted_laser_min_score = 10,
-    inverted_laser_prob = 0.1, -- chance to spawn on normal laser spawn
+    inverted_laser_prob = 0.15, -- chance to spawn on normal laser spawn
     inverted_laser_displ = 3,
-    inverted_laser_gap = 200,
+    inverted_laser_gap = 100,
     inverted_laser_width = 1000,
     inverted_laser_length = 2000,
 
     missile_height = 40,
     missile_width = 10,
     missile_disappear_time = 0.5,
-    missile_force_mul = 150,
+    missile_force_mul = 200,
     missile_min_score = 5,
     missile_prob = 0.25, -- same as inverted laser prob
-    missiles_lifetime = 5,
+    missiles_lifetime = 3,
     missile_incut = 20,
     missile_delay = 5,
 

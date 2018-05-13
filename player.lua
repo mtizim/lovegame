@@ -14,7 +14,7 @@ function playerClass:init( x, y,
     self.maxspeed = maxspeed
     self.walldamp = walldamp
     self.collider = collider
-    self.hc_object = collider:circle(x,y,size)
+    self.hc_object = collider:circle(x,y,size - settings.player_collision_size)
     self.score = 0
 end
 

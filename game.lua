@@ -53,15 +53,7 @@ end
 
 function gameClass:new_missiles(r_time)
     -- corners
-    local first = math.random(6)
-    if first > 4 then 
-        -- do all four
-        self.enemies:add(missileClass(0,0,r_time,self.collider))
-        self.enemies:add(missileClass(0,window_height,r_time,self.collider))
-        self.enemies:add(missileClass(window_width,0,r_time,self.collider))
-        self.enemies:add(missileClass(window_width,window_height,r_time,self.collider))
-        return nil
-    end
+    local first = math.random(4)
     local second = math.random(4)
     if second == first then 
         local pm
@@ -75,7 +67,7 @@ function gameClass:new_missiles(r_time)
     if second > 4 then second = 1 end
     if second < 1 then second = 4 end
     if first == 1 or second == 1 then
-        self.enemies:add( missileClass(0,0,r_time,self.collider))
+        self.enemies:add(missileClass(0,0,r_time,self.collider))
     end
     if first == 2 or second == 2 then
         self.enemies:add(missileClass(0,window_height,r_time,self.collider))
@@ -140,19 +132,25 @@ function gameClass:update_normal(dt)
         self.laser_every_timer = 0
 
         -- inverted and missiles spawn with normal
-        if self.player.score > settings.missile_min_score and
+        if self.player.score >= settings.missile_min_score and
                 math.random() < settings.missile_prob and
                 self.missiles_timetonext <= 0 then
             self.missiles_timetonext = settings.missile_delay
             self:new_missiles(settings.missiles_lifetime)
+            self.inverted_laser_timetonext = math.max(settings.missiles_lifetime,
+                                                      self.inverted_laser_timetonext)
         end
 
-        if self.player.score > settings.inverted_laser_min_score and
+        if self.player.score >= settings.inverted_laser_min_score and
                 math.random() < settings.inverted_laser_prob and
                 self.inverted_laser_timetonext <= 0 then
+            -- so that lasers don't spawn while then big laser is there
+                -- magic number i won't put into settings here
+            self.laser_every_timer = 1.5 * self.laser_every
+                                    - settings.inverted_laser_stay
             self.inverted_laser_timetonext = settings.inverted_laser_delay
             self:new_inverted_laser(settings.inverted_laser_stay,
-                                settings.laser_disappear_base)
+                                    settings.laser_disappear_base)
         end
 
     end
@@ -190,9 +188,9 @@ end
 --Updates appropriate objects
 function gameClass:update(dt)
     --joystick reaction
+    -- self.player.alive = true
+    
     -- if something is stopping the drawing or if the game is really slow
-    self.player.alive = true
-
     
     if dt > settings.pause_dt and self.player.alive then 
         self:pause()
