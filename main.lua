@@ -1,5 +1,6 @@
 Class = require("dependencies.30log")
 hc = require("dependencies.hardoncollider")
+polygon = require("dependencies.hardoncollider.polygon")
 -- inspect = require("inspect")
 
 osString = love.system.getOS( )
@@ -16,6 +17,7 @@ require("game_background")
 require("main_menu")
 require("button")
 require("inverted_laser")
+require("missile")
 require("laser")
 require("player")
 require("themes")
@@ -66,7 +68,6 @@ function love.draw()
     if DISPLAY_FRAMES then 
         love.graphics.setColor({1,1,1})
         love.graphics.print(1/delta_time,30,10);
-        love.graphics.print(total_time,400,10) 
     end
     if DEBUG then
         -- love.graphics.print(tostring(laser.exploded), 30, 30)

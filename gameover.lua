@@ -45,8 +45,7 @@ function gameClass:update_gameover(dt)
 end
 
 function gameClass:init_gameover()
-    if self.player.score > settings.highscore then
-            self.highscore_bool = true
+    if self.highscore_bool then
             settings.highscore = self.player.score
             save_settings()
     end
@@ -61,6 +60,7 @@ function gameClass:init_gameover()
                             settings.paused_main_x,
                             settings.paused_main_y
                             )
+    self.gameover_main:update_textshift()
     local gameover_score_text = settings.gameover_score_text .. " "
                                 .. self.player.score
     self.gameover_score = buttonClass(settings.menu_settings_behind,

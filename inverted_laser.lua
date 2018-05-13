@@ -20,7 +20,6 @@ end
 
 function inverted_laserClass:alpha_function_exploded()
     local x = self.remain_time - self.time_left --time passed
-    print(x)
     return 1 - ((x * x) / (self.remain_time * self.remain_time))
 end
 
@@ -29,11 +28,13 @@ function inverted_laserClass:explode()
     self.hc_objects[1] = self.collider:rectangle( self.x -
             settings.inverted_laser_width - settings.inverted_laser_gap / 2 ,
         self.y - settings.inverted_laser_length / 2,
-        settings.inverted_laser_width, settings.inverted_laser_length)
+        settings.inverted_laser_width - settings.laser_exploded_width_red,
+        settings.inverted_laser_length)
     self.hc_objects[2] = self.collider:rectangle( self.x +
-            settings.inverted_laser_gap / 2,
+            settings.inverted_laser_gap/2 + settings.laser_exploded_width_red,
         self.y - settings.inverted_laser_length / 2,
-        settings.inverted_laser_width, settings.inverted_laser_length)
+        settings.inverted_laser_width - settings.laser_exploded_width_red,
+        settings.inverted_laser_length)
     self.hc_objects[1]:rotate(-self.rotation ,self.x,self.y)
     self.hc_objects[2]:rotate(-self.rotation ,self.x,self.y)
     self.time_left = self.remain_time
@@ -59,10 +60,10 @@ function inverted_laserClass:update(dt)
     --so that the collision can be quick
     if self.remain_time - self.time_left > settings.laser_collision_timer
        and self.hc_objects[1] then
-        -- self.collider:remove(self.hc_objects[1])
-        -- self.collider:remove(self.hc_objects[2])
-        -- self.hc_objects[1] = nil
-        -- self.hc_objects[2] = nil
+        self.collider:remove(self.hc_objects[1])
+        self.collider:remove(self.hc_objects[2])
+        self.hc_objects[1] = nil
+        self.hc_objects[2] = nil
     end 
     if self.hc_objects[1] then
         self:player_collision(application.current.player)
@@ -111,10 +112,10 @@ function inverted_laserClass:draw_normal()
 end
 
 function inverted_laserClass:draw()
-    if self.hc_objects[1] then
-        self.hc_objects[1]:draw()
-        self.hc_objects[2]:draw()
-    end
+    -- if self.hc_objects[1] then
+        -- self.hc_objects[1]:draw()
+        -- self.hc_objects[2]:draw()
+    -- end
     if not self.destroyed then
         if self.exploded then
             self:draw_exploded()

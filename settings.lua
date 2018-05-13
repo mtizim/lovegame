@@ -2,8 +2,13 @@
 -- it's a collection of magic values 
 settings = {
     --should be constants
-                                                        -- +- 15 is the offset
+    -- after this much delay the game will pause
+    pause_dt = 0.2,
+    -- +- 15 is the offset
     score_font_size = window_height * 8/6,
+    unpause_font_size = window_height / 10,
+    paused_main_font_size = window_height / 12,
+    menu_settings_font_size = window_height * 8 /80,
     menu_button_font_size = window_height / 8,
     menu_buttons_x = window_height / 12                         + 15,
     menu_buttons_spacing = window_height / 7,
@@ -15,7 +20,6 @@ settings = {
     menu_start_behind = - window_width / 6,
     menu_travel_time = 0.5,
 
-    menu_settings_font_size = window_height * 6 /80,
     menu_settings_behind = window_width * 9/6 , --same as menu_start_behind
     menu_settings_first_y = window_height * 3/6                 + 15,
     menu_settings_x = window_width * 58/60                      - 15,
@@ -32,18 +36,16 @@ settings = {
     menu_themes_y = window_height * 4/5                         - 15,
     
     gameover_scores_x = window_width * 50/52                    - 15,
-    gameover_first_score_y =0                                   + 15,
-    gameover_spacing = window_height * 1/10,
+    gameover_first_score_y = window_height * 1/20               + 15,
+    gameover_spacing = window_height * 3/20,
     gameover_score_text = "score",
     gameover_highscore_text = "highscore",
 
     unpause_text = "stopped",
-    unpause_font_size = window_height / 10,
 
     paused_main_text = "main",
-    paused_main_font_size = window_height / 15,
     paused_main_y = window_height * 135/150                     - 15,
-    paused_main_x = window_width * 70/80                        - 15,
+    paused_main_x = window_width * 50/52                        - 15,
 
     offset = 15, --15 for mobile
     player_size = 10,
@@ -60,12 +62,12 @@ settings = {
     laser_random_r_deviation = math.pi / 23,  -- +- that
     laser_collision_timer = 0.02,
     laser_disappear_base = 0.3,
-    laser_exploded_width_multiplier = 0.3, --reduces the actual collision box
-    laser_every_base = 0.7,
-    laser_every_min = 0.6,
+    laser_exploded_width_red = 7, --reduces the actual collision box by x
+    laser_every_base = 1.5,
+    laser_every_min = 0.8,
 
-    inverted_laser_delay = 2,
-    -- to 2/3 screen width and heigh 
+    inverted_laser_delay = 5,
+    -- to 2/3 screen width and height
     -- 3 means that the random bounding box is from 1/3 screen width and height
     inverted_laser_stay = 3,
     inverted_laser_min_score = 10,
@@ -75,8 +77,18 @@ settings = {
     inverted_laser_width = 1000,
     inverted_laser_length = 2000,
 
+    missile_height = 80,
+    missile_width = 25,
+    missile_disappear_time = 0.5,
+    missile_force_mul = 150,
+    missile_min_score = -5,
+    missile_prob = 50.25, -- same as inverted laser prob
+    missiles_lifetime = 5,
+    missile_incut = 20,
+    missile_delay = 1,
 
-    controller_mul = 5000, -- should be about 10 * maxspeed
+    -- no the controller controls vx vy directly
+    -- controller_mul = 500000, -- should be about 10 * maxspeed
     controller_dotradius = 5, -- 10 for mobile
     controller_line = 1.2,  -- ok for mobile
     controller_size_max = 121,

@@ -7,9 +7,8 @@ function gameClass:init()
     self.enemies = linkedlistClass()
     self.collectibles = linkedlistClass()
     self.collider = hc.new()
-    self.pressed_before_bool = false
     self.game_controller = gamecontrollerClass(settings.controller_size,
-                                               settings.controller_mul)
+                                               settings.player_maxspeed)
     self.laser_every_timer = 0
     -- is it the first time showing the gameover screen?
     self.first_gameover_update_bool = true
@@ -19,6 +18,9 @@ function gameClass:init()
     self.laser_disappear = settings.laser_disappear_base
     self.theme = themes[settings.theme]
     self.laser_every = settings.laser_every_base
+    self.inverted_laser_timetonext = settings.inverted_laser_delay
+    self.missiles_timetonext = settings.missile_delay
+
                           --top, bottom,left,right
     self.bounding_box = { settings.offset, window_height - settings.offset,
                           settings.offset, window_width  - settings.offset}
@@ -30,7 +32,7 @@ function gameClass:init()
                                self.collider)    
     self.paused = false
     self.highscore_bool = false
-    self.inverted_laser_timetonext = settings.inverted_laser_delay
+    self.pressed_before_bool = false
 end
 
 --Calculates the random position pointing at the player
@@ -47,6 +49,37 @@ function gameClass:new_laser(width,height,time,r_time)
                              time,r_time,
                              self.collider)
     self.enemies:add(laser)
+end
+
+function gameClass:new_missiles(r_time)
+    -- corners
+    local first = math.random(4)
+    local second = math.random(4)
+    if second == first then 
+        local pm
+        if math.random() < 0.5 then 
+            pm = 1
+        else
+            pm = -1
+        end
+        second = (second + pm)
+    end
+    if second > 4 then second = 1 end
+    if second < 1 then second = 4 end
+    print(first,second)
+    if first == 1 or second == 1 then
+        self.enemies:add( missileClass(0,0,r_time,self.collider))
+    end
+    if first == 2 or second == 2 then
+        self.enemies:add(missileClass(0,window_height,r_time,self.collider))
+    end
+    if first == 3 or second == 3 then
+        self.enemies:add(missileClass(window_width,0,r_time,self.collider))
+    end
+    if first == 4 or second == 4 then
+        self.enemies:add(missileClass(window_width,window_height,r_time,self.collider))
+    end
+    
 end
 
 function gameClass:new_inverted_laser(time,r_time)
@@ -72,16 +105,21 @@ function gameClass:update_normal(dt)
 
     --player
 
-    local ax,ay,r = self.game_controller:update()
+    if (self.player.score > settings.highscore) then 
+        self.highscore_bool = true
+    end
+
+    local vx,vy,r = self.game_controller:update()
     if r then 
         self.player.maxspeed = settings.player_maxspeed * r
     end
-    self.player.ax = ax or 0
-    self.player.ay = ay or 0
+    self.player.vx = vx or self.player.vx
+    self.player.vy = vy or self.player.vy
     self.player:update(dt,self.bounding_box)
 
     -- timers    
-    self.inverted_laser_timetonext = math.max(-1,self.inverted_laser_timetonext - dt)
+    self.inverted_laser_timetonext = self.inverted_laser_timetonext - dt
+    self.missiles_timetonext = self.missiles_timetonext - dt 
     self.laser_every_timer = self.laser_every_timer + dt
     
     -- lasers
@@ -94,7 +132,14 @@ function gameClass:update_normal(dt)
                        settings.laser_disappear_base)
         self.laser_every_timer = 0
 
-        -- inverted spawn with normal
+        -- inverted and missiles spawn with normal
+        if self.player.score > settings.missile_min_score and
+                math.random() < settings.missile_prob and
+                self.missiles_timetonext <= 0 then
+            self.missiles_timetonext = settings.missile_delay
+            self:new_missiles(settings.missiles_lifetime)
+        end
+
         if self.player.score > settings.inverted_laser_min_score and
                 math.random() < settings.inverted_laser_prob and
                 self.inverted_laser_timetonext <= 0 then
@@ -106,12 +151,12 @@ function gameClass:update_normal(dt)
     end
 
 
-    -- update all lasers and remove destroyed ones
+    -- update all enemies and remove destroyed ones
     self.enemies:update_forall(dt)
 
     -- collectibles
     self.collectibles:update_forall(dt)
-    if self.collectibles.length == 0 then
+    if  self.collectibles.length == 0 then
         local x = math.random(2*self.offset, window_width - 2*self.offset)
         local y = math.random(2*self.offset, window_height - 2*self.offset)
         local new = collectibleClass(x, y,
@@ -139,7 +184,10 @@ end
 function gameClass:update(dt)
     --joystick reaction
     -- if something is stopping the drawing or if the game is really slow
-    if dt > 0.2 then 
+    self.player.alive = true
+
+    
+    if dt > settings.pause_dt and self.player.alive then 
         self:pause()
         return
     end
@@ -194,10 +242,11 @@ function gameClass:pause()
                             paused_main_font,
                             1,
                             go_to_menu,
-                            1,
+                            0,
                             settings.paused_main_x,
                             settings.paused_main_y
                             )                
+    self.main_button:update_textshift()
 end
 
 --Self explanatory
@@ -214,12 +263,14 @@ end
 function gameClass:drawScore()
     love.graphics.setFont(score_font)
     local score = self.player.score
-    -- how long the score is
-    local size = math.floor(math.log10(score)) + 1
     local x, y = window_width/2, - 0.1 * window_height
     local width = score_font:getWidth(score)
     x = x - width / 2
-    love.graphics.setColor(self.theme.score)
+    local score_theme = self.theme.score
+    if (self.highscore_bool and not(settings.highscore == 0)) then
+        score_theme = self.theme.beaten_score
+    end
+    love.graphics.setColor(score_theme)
     love.graphics.print(score,x,y)
     
 end

@@ -67,11 +67,22 @@ function buttonClass:update(dt)
     end
 end
 
-function buttonClass:draw(givencolor)
-    if self.color or givencolor then
+function buttonClass:draw(givencolor,bordersize)
+    outlinecolor = themes[theme_names[settings.theme_number]].background
+    bordersize = bordersize or 1
+    if self.color or givencolor then        
         if givencolor then self.color = givencolor end
-        love.graphics.setColor(self.color[1],self.color[2],self.color[3],self.alpha)
+        if outlinecolor then self.outlinecolor = outlinecolor end
         love.graphics.setFont(self.font)
+        love.graphics.setColor(self.outlinecolor[1],self.outlinecolor[2],
+                               self.outlinecolor[3],self.alpha)
+
+        love.graphics.print(self.text,self.x - bordersize, self.y)
+        love.graphics.print(self.text,self.x + bordersize, self.y)
+        love.graphics.print(self.text,self.x, self.y + bordersize)
+        love.graphics.print(self.text,self.x, self.y - bordersize)
+
+        love.graphics.setColor(self.color[1],self.color[2],self.color[3],self.alpha)
         love.graphics.print(self.text,self.x,self.y)
     end
 end

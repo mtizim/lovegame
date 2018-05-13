@@ -2,9 +2,8 @@ application = {}
 
 --Takes care of scenes
 function application:init()
-    local scene = gameClass()
+    local scene = main_menuClass()
     self.current = scene
-    self.time_elapsed = 0
 end
 
 function application:change_scene_to(scene)

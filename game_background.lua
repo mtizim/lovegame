@@ -18,7 +18,7 @@ function game_backgroundClass:init()
     self.laser_stay = settings.laser_stay_base
     self.laser_disappear = settings.laser_disappear_base
     self.theme = themes[settings.theme]
-    self.laser_every = settings.laser_every_base
+    self.laser_every = settings.laser_every_min
                           --top, bottom,left,right
     self.bounding_box = { settings.offset, window_height - settings.offset,
                           settings.offset, window_width  - settings.offset}

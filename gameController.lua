@@ -18,7 +18,7 @@ function gamecontrollerClass:update(dt)
             self.pressed.bool = true
             -- position at which the mouse was first pressed
             self.pressed.x,self.pressed.y = love.mouse.getPosition()
-            return 0,0,nil
+            return nil,nil,nil
         elseif mouse_state then
             local x,y = love.mouse.getPosition()
             -- deviations from the center of the first press
@@ -46,7 +46,7 @@ function gamecontrollerClass:update(dt)
         if (not self.pressed.bool) and mouse_state then
             self.pressed.bool = true
             self.pressed.x,self.pressed.y = love.touch.getPosition(first)
-            return 0,0,nil
+            return nil,nil,nil
         elseif mouse_state then
             local x,y = love.touch.getPosition(first)
             local delta_y,delta_x = y - self.pressed.y,x - self.pressed.x
@@ -60,7 +60,7 @@ function gamecontrollerClass:update(dt)
             return ax,ay,r
         elseif not mouse_state then
             self.pressed.bool = false
-            return 0,0,nil
+            return nil,nil,nil
         end
     end
 end

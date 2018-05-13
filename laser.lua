@@ -29,11 +29,10 @@ end
 -- Changes state to exploded and adds the collision object
 function laserClass:explode()
     self.exploded = true
-    self.hc_object = self.collider:rectangle(self.x - self.width_exploded *
-                                               settings.laser_exploded_width_multiplier
-                                               /2,
+    self.hc_object = self.collider:rectangle(self.x - self.width_exploded/2 +
+                                               settings.laser_exploded_width_red,
                                              self.y - self.height_exploded/2,
-                                             self.width_exploded * settings.laser_exploded_width_multiplier,
+                                             self.width_exploded - settings.laser_exploded_width_red * 2,
                                              self.height_exploded)
     self.hc_object:rotate(-self.rotation)
     self.time_left = self.remain_time
@@ -114,6 +113,7 @@ end
 
 --Calls the appropriate drawing function
 function laserClass:draw()
+    -- if self.hc_object then self.hc_object:draw() end
     if not self.destroyed then
         if self.exploded then
             self:draw_exploded()
