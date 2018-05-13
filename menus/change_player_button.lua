@@ -68,7 +68,13 @@ function pl_model_btnClass:draw(color, model_size)
     love.graphics.setColor(color)
     love.graphics.setLineWidth(settings.pl_btn_line_width)
     -- love.graphics.rectangle("line",self.x,self.y,self.width,self.width)
-    drawable[self.playermodel].draw(self.x + self.width/2,
-                               self.y + self.width/2,
-                               self.rot,model_size,self.playermodel_mode)
+    if self.unlocked then 
+        drawable[self.playermodel].draw(self.x + self.width/2,
+                                        self.y + self.width/2,
+                                        self.rot,model_size,self.playermodel_mode)
+    else
+        -- yo magic number here and it's not gonna make it to the settings
+        draw_lock(self.x + self.width/2,
+                  self.y + self.width/2,model_size * 2)
+    end
 end

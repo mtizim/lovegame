@@ -69,7 +69,7 @@ function open_visual_menu()
         button_cooldown = settings.button_cooldown
         elf.visual_menu = visual_menuClass(elf)
         if elf.settings_bool then
-            -- elf:revert_settings()
+            elf:revert_settings()
         end
         elf.themes:revert()
     end
@@ -83,6 +83,10 @@ end
 function toggle_settings()
     local elf = application.current
     if not elf.settings_bool then
+        if elf.visual_menu and elf.visual_menu.open then 
+            elf.visual_menu:revert()
+            elf.themes:revert()
+        end
         --fuck style here
         elf.remove_highscore_counter = settings.remove_highscore_counter
         elf.settings_bool = true

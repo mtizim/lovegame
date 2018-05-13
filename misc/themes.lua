@@ -9,8 +9,8 @@ local blue_less = {0.1,0.1,0.8}
 local golden = {1,0.84,0}
 local golden_transparent = {golden[1],golden[2],golden[3], 0.1}
 
-themes = {
-    black_red = 
+themes = {}
+themes["black/red"] = 
     {
         laser = red,
         laser_exploded = white,
@@ -28,8 +28,8 @@ themes = {
         beaten_highscore = golden,
         beaten_score = golden_transparent,
         highscore = red,
-    },
-    white_red =
+    }
+themes["white/red"] =
     {
         laser = black,
         laser_exploded = red,
@@ -48,9 +48,10 @@ themes = {
         beaten_score = golden_transparent,
         highscore = black,
     }
-}
 
-theme_names = {
-    "black_red",
-    "white_red",
-}
+
+
+    -- for key,_ in pairs(themes) do
+        -- theme_names[#theme_names + 1] = key
+    -- end
+    theme_names = {"black/red","white/red"}

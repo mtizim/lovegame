@@ -28,16 +28,17 @@ end
 drawable.square_hypno = {}
 function drawable.square_hypno.draw(x,y,rot,rad,mode)
     local a = 1.77 * rad -- sqrt(pi) * r
-    local diff = 1/3 * a
-    for n=0,2 do
-        local shift  = - a/2
-        love.graphics.push()
-            love.graphics.translate(x,y)
-            love.graphics.rotate( - rot)
+    local diff = 1/4 * a
+    love.graphics.push()
+        love.graphics.translate(x,y)
+        love.graphics.rotate( - rot)
+        for i=0,3 do
+            local shift  = - a/2
             love.graphics.rectangle("line",shift,shift,a,a)
-        love.graphics.pop()
-        a = a - diff
-    end
+            love.graphics.rotate(math.pi * 0.05)
+            a = a - diff
+        end
+    love.graphics.pop()
 end
 
 drawable.triangle = {}
@@ -51,6 +52,25 @@ function drawable.triangle.draw(x,y,rot,rad,mode)
                               0,  2*on,
                               a / 2, -on,
                               -a / 2,-on)
+        
+    love.graphics.pop()
+end
+
+drawable.triangle_hypno = {}
+function drawable.triangle_hypno.draw(x,y,rot,rad)
+    local a = rad * 2.69 -- * 4 pi / sqrt(3)
+    love.graphics.push()
+        love.graphics.translate(x,y)
+        love.graphics.rotate( - rot)
+        for i=0,3 do
+            a = a * (3-i)/3
+            local on = math.sqrt(3) * a / 6
+            love.graphics.polygon("line",
+                                0,  2*on,
+                                a / 2, -on,
+                                -a / 2,-on)
+            love.graphics.rotate(math.pi * 0.05)
+        end
         
     love.graphics.pop()
 end
@@ -79,4 +99,5 @@ function drawable.hypno.draw(x,y,_,rad)
 end
 
 
-player_draw_list = {"ball","square","hypno","square_hypno","triangle","triangle_circle"}
+player_draw_list = {"ball","square","triangle","triangle_circle",
+                    "hypno","square_hypno","triangle_hypno"}

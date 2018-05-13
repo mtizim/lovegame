@@ -32,7 +32,7 @@ settings = {
     removed_highscore_text = "reset",
     button_cooldown = 0.3,
 
-    menu_themes_text = "visual",
+    menu_themes_text = "skins",
     menu_themes_y = window_height * 4/5                         - 15,
     
     visual_menu_first_x = window_width *0                       + 15,
@@ -41,13 +41,17 @@ settings = {
     vixual_menu_btns_y = window_height - window_width/10        - 15,
     pl_btn_travel_time = 0.3,
     pl_btn_line_width = 2,
-    themes_act_ypos = window_height * 5/6                       - 15,
+    fill_btn_txt = "fill",
+    fill_btn_inactive_a = 0.5,
+    -- menu settings font size       \/\/\/\/\/\/\/\/\/\/\/
+    themes_act_ypos = window_height - window_height * 8 /80     - 15,
+    
     
     gameover_scores_x = window_width * 50/52                    - 15,
     gameover_first_score_y = window_height * 1/20               + 15,
     gameover_spacing = window_height * 3/20,
     gameover_score_text = "score",
-    gameover_highscore_text = "highscore",
+    gameover_highscore_text = "highscore: ",
 
     unpause_text = "stopped",
 
@@ -110,6 +114,7 @@ settings = {
     collectible_fadein = 2, --same as above                                 
     collectible_size = 7,
 
+    font = "Geo.otf",
     --defaults
     theme_number = 1,
     controller_size = 60,
@@ -117,8 +122,23 @@ settings = {
     highscore = 0,
     player_fill_mode = "line",
     player_model = "ball",
+    skins_unlocked = {
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+    },
+    themes_unlocked ={
+        false,
+        false
+    },
+    fill_unlocked = false,
+
+    coins = 0,
     -- main font
-    font = "Geo.otf",
 }
 -- font things
 settings.score_font_size = window_height
@@ -147,6 +167,20 @@ function read_settings()
                 settings.highscore = tonumber(valtab[4]) or settings.highscore
                 settings.player_fill_mode = tostring(valtab[5] or settings.player_fill_mode)
                 settings.player_model = tostring(valtab[6] or settings.player_model)
+                settings.coins = tonumber(valtab[7]) or nil
+                local n = 8
+                for i=n,#settings.skins_unlocked + n - 1 do
+                    settings.skins_unlocked[i - n + 1] = 
+                        tostring(valtab[i] or settings.skins_unlocked[i - n + 1]) == "true"
+                end
+                local n = n + #settings.skins_unlocked
+                for i=n,#settings.themes_unlocked + n - 1 do
+                    settings.themes_unlocked[i - n + 1] =
+                        tostring(valtab[i] or settings.themes_unlocked[i - n + 1]) == "true"
+                end
+                local n = n + #settings.themes_unlocked 
+                settings.fill_unlocked = tostring(valtab[n] or settings.fill_unlocked) == "true"
+
             end
         file:close()
         file = nil
@@ -169,6 +203,19 @@ function save_settings()
         file:write("\n")
     file:write(tostring(settings.player_model))
         file:write("\n")
+    file:write(tostring(settings.coins))
+        file:write("\n")
+    for _,val in pairs(settings.skins_unlocked) do
+        file:write(tostring(val))
+            file:write("\n")
+    end
+    for _,val in pairs(settings.themes_unlocked) do
+        file:write(tostring(val))
+            file:write("\n")
+    end
+    file:write(tostring(settings.fill_unlocked))
+        file:write("\n")
     file = nil
 end
+
 read_settings()

@@ -18,7 +18,8 @@ function escape_pressed()
         if application.current.settings_bool then
             application.current:revert_settings()
         end
-        if application.current.visual_menu then
+        if application.current.visual_menu and
+                application.current.visual_menu.open then
             application.current.visual_menu:revert()
             application.current.themes:revert()
         end
