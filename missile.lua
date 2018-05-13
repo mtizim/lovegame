@@ -105,6 +105,6 @@ function missileClass:draw()
         local color = themes[settings.theme].missile
         love.graphics.setColor(color[1],color[2],color[3],self.alpha)
         if self.hc_object then self.hc_object:draw() end
-        love.graphics.polygon("line",self.hc_object._polygon:unpack())
+        love.graphics.polygon("fill",self.hc_object._polygon:unpack())
     end
 end
