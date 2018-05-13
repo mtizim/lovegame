@@ -24,23 +24,13 @@ function missileClass:init( x, y,
     
     self.collider = collider
     self.alpha = 1
-    local w_red = settings.laser_exploded_width_red
-    local h = self.height - w_red
-    local w = self.width - w_red
-    local incut = self.incut + w_red
-    self.hc_object = collider:polygon(  self.x, self.y - h,
-                                        self.x + w, self.y,
-                                        self.x , self.y - incut,
-                                        self.x -w, self.y)
-
-    self.polygon = polygon( self.x, self.y - self.height,
-                            self.x + self.width, self.y,
-                            self.x, self.y - self.incut,
-                            self.x - self.width, self.y)
-    self.polygon.rot = 0
-    self.polygon:rotate(math.pi/2)
-    self.polygon.x = self.x
-    self.polygon.y = self.y
+    local h = self.height
+    local w = self.width 
+    local incut = self.incut
+    self.hc_object = collider:polygon(  self.x, self.y + h,
+                                        self.x - w, self.y,
+                                        self.x , self.y + incut,
+                                        self.x +w, self.y)
 end
 
 
@@ -55,8 +45,6 @@ end
 
 function missileClass:start_disappearing()
     self.disappearing = true
-    self.collider:remove(self.hc_object)
-    self.hc_object = nil
     self.time_left = self.disappear_time
 end
 
@@ -78,7 +66,7 @@ function missileClass:update_position(dt,player)
     self.rotation = math.atan2(self.vx,self.vy)
 
     local player_dir = math.atan2( self.x - player.x, self.y - player.y)
-    
+    self.rotation = player_dir
 
     self.ax = - settings.missile_force_mul * math.sin(player_dir)
     self.ay =  - settings.missile_force_mul * math.cos(player_dir)
@@ -100,7 +88,7 @@ function missileClass:update(dt)
 
     self:update_position(dt,application.current.player)
     
-    if self.hc_object then
+    if self.hc_object and not self.disappearing then
         self:player_collision(application.current.player)
     end
 end
@@ -113,13 +101,10 @@ function missileClass:player_collision(player)
 end
 
 function missileClass:draw()
-    self.polygon:move(self.x - self.polygon.x,self.y - self.polygon.y)
-    self.polygon.x = self.x
-    self.polygon.y = self.y
-    self.polygon:rotate(self.rotation - self.polygon.rot)
-    self.polygon.rot = self.rotation
-    local color = themes[settings.theme].missile
-    love.graphics.setColor(color[1],color[2],color[3],self.alpha)
-    if self.hc_object then self.hc_object:draw() end
-    love.graphics.polygon("line",self.polygon:unpack())
+    if not self.destroyed then
+        local color = themes[settings.theme].missile
+        love.graphics.setColor(color[1],color[2],color[3],self.alpha)
+        if self.hc_object then self.hc_object:draw() end
+        love.graphics.polygon("line",self.hc_object._polygon:unpack())
+    end
 end

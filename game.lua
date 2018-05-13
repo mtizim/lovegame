@@ -53,7 +53,15 @@ end
 
 function gameClass:new_missiles(r_time)
     -- corners
-    local first = math.random(4)
+    local first = math.random(6)
+    if first > 4 then 
+        -- do all four
+        self.enemies:add(missileClass(0,0,r_time,self.collider))
+        self.enemies:add(missileClass(0,window_height,r_time,self.collider))
+        self.enemies:add(missileClass(window_width,0,r_time,self.collider))
+        self.enemies:add(missileClass(window_width,window_height,r_time,self.collider))
+        return nil
+    end
     local second = math.random(4)
     if second == first then 
         local pm
@@ -66,7 +74,6 @@ function gameClass:new_missiles(r_time)
     end
     if second > 4 then second = 1 end
     if second < 1 then second = 4 end
-    print(first,second)
     if first == 1 or second == 1 then
         self.enemies:add( missileClass(0,0,r_time,self.collider))
     end

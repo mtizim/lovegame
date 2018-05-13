@@ -77,15 +77,15 @@ settings = {
     inverted_laser_width = 1000,
     inverted_laser_length = 2000,
 
-    missile_height = 80,
-    missile_width = 25,
+    missile_height = 40,
+    missile_width = 10,
     missile_disappear_time = 0.5,
     missile_force_mul = 150,
-    missile_min_score = -5,
-    missile_prob = 50.25, -- same as inverted laser prob
+    missile_min_score = 5,
+    missile_prob = 0.25, -- same as inverted laser prob
     missiles_lifetime = 5,
     missile_incut = 20,
-    missile_delay = 1,
+    missile_delay = 5,
 
     -- no the controller controls vx vy directly
     -- controller_mul = 500000, -- should be about 10 * maxspeed
