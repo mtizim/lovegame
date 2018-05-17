@@ -85,8 +85,8 @@ settings = {
     -- to 2/3 screen width and height
     -- 3 means that the random bounding box is from 1/3 screen width and height
     inverted_laser_stay = 2,
-    inverted_laser_min_score = 10,
-    inverted_laser_prob = 0.15, -- chance to spawn on normal laser spawn
+    inverted_laser_min_score = 15,
+    inverted_laser_prob = 0.17, -- chance to spawn on normal laser spawn
     inverted_laser_displ = 3,
     inverted_laser_gap = 100,
     inverted_laser_width = 1000,
@@ -97,12 +97,25 @@ settings = {
     missile_disappear_time = 0.5,
     missile_force_mul = 200,
     missile_min_score = 5,
-    missile_prob = 0.25, -- same as inverted laser prob
+    missile_prob = 0.30, -- same as inverted laser prob
     missiles_lifetime = 3,
     missile_incut = 20,
-    missile_delay = 5,
+    missile_delay = 3.7,
 
-    -- no the controller controls vx vy directly
+    triplelaser_delay = 6,
+    triplelaser_laser_delay = 0.2,
+    -- same as inverted_laser_stay
+    -- 3 means from 1/3 to 1 - 1/3
+    triplelaser_explode_time = 3,
+    --increments missile timer
+    triplelaser_missiles_inc = 3,
+    triplelaser_area = 3,
+    triplelaser_prob = 0.17,
+    triplelaser_collision_timer = 1.44,
+    triplelaser_min_score = 10,
+    triplelaser_stay_time = 2,
+
+    -- now the controller controls vx vy directly
     -- controller_mul = 500000, -- should be about 10 * maxspeed
     controller_dotradius = 5, -- 10 for mobile
     controller_line = 1.2,  -- ok for mobile
@@ -113,6 +126,15 @@ settings = {
                                  -- so it's lighter
     collectible_fadein = 2, --same as above                                 
     collectible_size = 7,
+
+    coin_time = 6,
+    coin_x = 15                                                                      + 15,
+    coin_y = 15                                                                      + 15,    
+    coin_scale = 1.5,
+    coin_display_time = 2,
+    coin_prob = 0.25,
+    -- dynamically edited later on
+    coin_font_size = 12,
 
     font = "Geo.otf",
     --defaults
@@ -167,7 +189,7 @@ function read_settings()
                 settings.highscore = tonumber(valtab[4]) or settings.highscore
                 settings.player_fill_mode = tostring(valtab[5] or settings.player_fill_mode)
                 settings.player_model = tostring(valtab[6] or settings.player_model)
-                settings.coins = tonumber(valtab[7]) or nil
+                settings.coins = tonumber(valtab[7]) or 0
                 local n = 8
                 for i=n,#settings.skins_unlocked + n - 1 do
                     settings.skins_unlocked[i - n + 1] = 

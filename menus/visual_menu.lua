@@ -31,7 +31,7 @@ function visual_menuClass:init(parent)
                                 menu_settings_font,
                                 1,
                                 cycle_themes,
-                                settings.menu_travel_time,
+                                settings.pl_btn_travel_time,
                                 settings.menu_settings_x,
                                 settings.themes_act_ypos
                                 )
@@ -48,7 +48,7 @@ function visual_menuClass:init(parent)
                                 menu_settings_font,
                                 fill_btn_alpha,
                                 toggle_fill,
-                                settings.menu_travel_time,
+                                settings.pl_btn_travel_time,
                                 settings.menu_settings_x,
                                 settings.themes_act_ypos -
                             settings.menu_settings_spacing

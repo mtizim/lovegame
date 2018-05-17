@@ -6,13 +6,13 @@ function laserClass:init( x, y, r,
                           width, height,
                           width_exploded, height_exploded,
                           time, remain_time,
-                          collider)
+                          collider,collision_timer)
     self.x, self.y = x, y
     self.rotation = r
     self.width, self.height = width, height
     self.width_exploded, self.height_exploded = width_exploded, height_exploded
     
-   
+    self.collision_timer = collision_timer or settings.laser_collision_timer
 
     self.time_initial = time
     self.time_left = time
@@ -61,7 +61,7 @@ function laserClass:update(dt)
     if self.time_left==0 and not self.exploded then self:explode() end
     if self.time_left <= 0 and self.exploded then self:destroy() end
     --so that the collision can be quick
-    if self.remain_time - self.time_left > settings.laser_collision_timer
+    if self.remain_time - self.time_left > self.collision_timer
        and self.hc_object then
         self.collider:remove(self.hc_object)
         self.hc_object = nil

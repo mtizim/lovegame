@@ -15,6 +15,7 @@ require("game.game")
 require("game.gameover")
 require("game.gameController")
 require("game.collectible")
+require("game.coin")
 require("misc.helpers")
 require("menus.game_background")
 require("menus.change_player_button")
@@ -22,12 +23,15 @@ require("menus.visual_menu")
 require("menus.main_menu")
 require("menus.button")
 require("game.inverted_laser")
+require("game.triple_laser")
 require("game.missile")
 require("game.laser")
 require("menus.player_draw")
 require("game.player")
 require("misc.keypressed")
 require("misc.lock")
+
+
 
 math.randomseed(os.time())
 
@@ -39,6 +43,10 @@ DISPLAY_FRAMES = false
 
 
 function love.load()
+
+    coin_image = love.graphics.newImage("coin.png")
+    settings.coin_font_size = coin_image:getHeight() * settings.coin_scale
+    coin_font = love.graphics.newFont(settings.font,settings.coin_font_size)
     
     application:init()
     
@@ -54,7 +62,6 @@ end
 if DISPLAY_FRAMES then delta_time, total_time = 0 , 0 end
 
 function love.update(dt)
-    dtt = dt
     application:update(dt)
 
     

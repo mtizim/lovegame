@@ -9,11 +9,19 @@ makelove:
 		rm -f game.love
 		mkdir -p pak/
 		mkdir -p pak/dependencies
+		mkdir -p pak/game
+		mkdir -p pak/menus
+		mkdir -p pak/misc
 		cp -r dependencies/* pak/dependencies/
+		cp -r game/* pak/game/
+		cp -r menus/* pak/menus/
+		cp -r misc/* pak/misc/
+		cp *.png pak/
 		cp *.lua pak/
 		cp *.otf pak/
 		cd pak/ ; \
 		zip -9 -r $(shell pwd)/game.love .
+		rm -rd pak/
 
 apk:	
 		rm -rf ${APK_DIR}/love_decoded

@@ -6,6 +6,7 @@ function gameClass:init()
     local x, y = window_width/2, window_height/2
     self.enemies = linkedlistClass()
     self.collectibles = linkedlistClass()
+    self.coin_list = linkedlistClass()
     self.collider = hc.new()
     self.game_controller = gamecontrollerClass(settings.controller_size,
                                                settings.player_maxspeed)
@@ -20,7 +21,11 @@ function gameClass:init()
     self.laser_every = settings.laser_every_base
     self.inverted_laser_timetonext = settings.inverted_laser_delay
     self.missiles_timetonext = settings.missile_delay
+    self.triplelaser_timetonext = settings.triplelaser_delay
 
+    self.coins = 0
+    self.coin_display_time = 0
+    self.coin_spawned_this_window = false
                           --top, bottom,left,right
     self.bounding_box = { settings.offset, window_height - settings.offset,
                           settings.offset, window_width  - settings.offset}
@@ -117,12 +122,14 @@ function gameClass:update_normal(dt)
     self.player:update(dt,self.bounding_box)
 
     -- timers    
-    self.inverted_laser_timetonext = self.inverted_laser_timetonext - dt
-    self.missiles_timetonext = self.missiles_timetonext - dt 
+    self.inverted_laser_timetonext = math.max(0,self.inverted_laser_timetonext - dt)
+    self.missiles_timetonext = math.max(0,self.missiles_timetonext - dt )
+    self.triplelaser_timetonext = math.max(0,self.triplelaser_timetonext - dt)
+    self.coin_display_time = math.max(0,self.coin_display_time - dt)
     self.laser_every_timer = self.laser_every_timer + dt
-    
-    -- lasers
-    
+
+    -- all enemies are spawned here basically
+
     if self.laser_every_timer >= self.laser_every then
         self:adjust_laser_timer()
         collectgarbage()
@@ -132,15 +139,27 @@ function gameClass:update_normal(dt)
         self.laser_every_timer = 0
 
         -- inverted and missiles spawn with normal
+        -- missiles
+        if self.player.score >= settings.triplelaser_min_score and 
+        math.random() < settings.triplelaser_prob and
+        self.triplelaser_timetonext <= 0 then
+            self.triplelaser_timetonext = settings.triplelaser_delay
+            self.enemies:add(triplelaserClass(self.collider))
+            self.missiles_timetonext = self.missiles_timetonext +
+                 settings.triplelaser_missiles_inc
+            self.inverted_laser_timetonext = self.inverted_laser_timetonext +
+                 settings.triplelaser_stay_time
+        end
+
         if self.player.score >= settings.missile_min_score and
-                math.random() < settings.missile_prob and
-                self.missiles_timetonext <= 0 then
+        math.random() < settings.missile_prob and
+        self.missiles_timetonext <= 0 then
             self.missiles_timetonext = settings.missile_delay
             self:new_missiles(settings.missiles_lifetime)
             self.inverted_laser_timetonext = math.max(settings.missiles_lifetime,
                                                       self.inverted_laser_timetonext)
         end
-
+        --inverted lasers
         if self.player.score >= settings.inverted_laser_min_score and
                 math.random() < settings.inverted_laser_prob and
                 self.inverted_laser_timetonext <= 0 then
@@ -158,7 +177,23 @@ function gameClass:update_normal(dt)
 
     -- update all enemies and remove destroyed ones
     self.enemies:update_forall(dt)
-
+    -- coins
+    self.coin_list:update_forall(dt)
+    -- print(self.player.score % 5 == 0 ,self.coin_spawned_this_window)
+    if (not (self.player.score % 5 == 0)) then self.coin_spawned_this_window = false end
+    if self.player.score % 5 == 0 and self.player.score > 0 and
+        not self.coin_spawned_this_window then
+            self.coin_spawned_this_window = true
+            if math.random() < settings.coin_prob then
+                local x = math.random(2*self.offset, window_width - 2*self.offset)
+                local y = math.random(2*self.offset, window_height - 2*self.offset)
+                local new = coinClass(x, y,
+                                            settings.collectible_size,
+                                            self.theme.coin,
+                                            self.collider)
+                self.coin_list:add(new)
+            end
+    end
     -- collectibles
     self.collectibles:update_forall(dt)
     if  self.collectibles.length == 0 then
@@ -227,6 +262,7 @@ end
 
 function gameClass:pause()
     self.paused = true
+    self.coin_display_time = 1 -- anythin positive works
     self.pause_button = buttonClass(window_width/2 -
                     unpause_font:getWidth(settings.unpause_text)/2,
                             window_height/2 -
@@ -277,14 +313,30 @@ function gameClass:drawScore()
     end
     love.graphics.setColor(score_theme)
     love.graphics.print(score,x,y)
-    
+end
+
+function gameClass:coin_collision()
+    self.coin_display_time = settings.coin_display_time
+end
+
+function gameClass:draw_coins()
+    if self.coin_display_time > 0 then
+        local x = coin_image:getWidth() * settings.coin_scale +  settings.coin_x 
+        local y = settings.coin_y  -  0.1 * coin_image:getHeight() * settings.coin_scale
+        love.graphics.setFont(coin_font)
+        love.graphics.setColor(self.theme.coin)
+        love.graphics.draw(coin_image,settings.coin_x,settings.coin_y,0,settings.coin_scale)
+        love.graphics.print(settings.coins,x,y)
+    end
 end
 
 --Draws appropriate objects
 function gameClass:draw()
     self:draw_background()
     self:drawScore()
+    self:draw_coins()
     self.collectibles:draw_forall()
+    self.coin_list:draw_forall()
     self.player:draw(self.theme.player)
     self.enemies:draw_forall()
     self.game_controller:draw(self.theme.controller,

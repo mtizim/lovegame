@@ -31,9 +31,12 @@ end
 --  and removes the destroyed nodes from the list
 function linkedlistClass:update_forall(dt)
     local current
+    local before
     if self.head then
         current = self.head
         while current do
+            local altbefore = nil
+            current.value:update(dt)
             if current.value.destroyed then
                 if current == self.head then
                     self.head = self.head.next
@@ -41,12 +44,11 @@ function linkedlistClass:update_forall(dt)
                 else 
                     before.next = current.next
                     current.value = nil
+                    local altbefore = before
                 end
                 self.length = self.length - 1
-            else
-                current.value:update(dt)
             end
-            before = current
+            before = altbefore or current
             current = current.next
         end
     end
