@@ -131,6 +131,7 @@ function gameClass:update_normal(dt)
     -- all enemies are spawned here basically
 
     if self.laser_every_timer >= self.laser_every then
+
         self:adjust_laser_timer()
         collectgarbage()
         self:new_laser(settings.laser_width,settings.laser_height,
@@ -262,7 +263,7 @@ end
 
 function gameClass:pause()
     self.paused = true
-    self.coin_display_time = 1 -- anythin positive works
+    self.coin_display_time = 0.01 -- anythin positive works
     self.pause_button = buttonClass(window_width/2 -
                     unpause_font:getWidth(settings.unpause_text)/2,
                             window_height/2 -

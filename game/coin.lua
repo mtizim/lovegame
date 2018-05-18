@@ -54,5 +54,9 @@ end
 function coinClass:draw()
     love.graphics.setColor(self.color[1],self.color[2],self.color[3],
                            self.alpha)
-    love.graphics.circle("fill", self.x, self.y, self.size)
+    local ox,oy = coin_image:getDimensions()
+    local x = self.x - ox/2 * settings.coin_scale_game
+    local y = self.y - oy/2 * settings.coin_scale_game
+    love.graphics.draw(coin_image,x,y,0,settings.coin_scale_game,
+        settings.coin_scale_game)
 end

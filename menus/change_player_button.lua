@@ -47,7 +47,7 @@ function pl_model_btnClass:update(dt)
         end
     end
 
-    if self.enabled and press_state and
+    if self.enabled and press_state  and self.unlocked and
        press_x > self.x and press_x < self.x + self.width and
        press_y > self.y and press_y < self.y + self.width
        and (not button_cooldown or button_cooldown < 0) then

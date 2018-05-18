@@ -8,7 +8,78 @@ function gameClass:draw_gameover()
             color = themes[settings.theme].beaten_highscore
         end
         self.gameover_highscore:draw(color)
+        -- same color since it makes sense
+        if self.unlocked_button then 
+            self.unlocked_button:draw(themes[settings.theme].beaten_highscore)
+        end
     end
+end
+
+function gameClass:check_and_unlock_skin()
+    print(settings.coins,settings.unlock_at[settings.unlock_which])
+    if not (settings.coins == settings.unlock_at[settings.unlock_which]) then
+        return
+    end
+    local count = 0
+    for i=1,#settings.skins_unlocked do
+        if not settings.skins_unlocked[i] then count = count + 1 end end
+    if count == 0 then return end
+                
+    
+    settings.unlock_which = settings.unlock_which + 1
+    
+    local tbool = true
+    while tbool do
+        local pos = math.random(1,#settings.skins_unlocked)
+        tbool = settings.skins_unlocked[pos]
+        settings.skins_unlocked[pos] = true
+    end
+
+    self.unlocked_button = buttonClass(
+        settings.menu_start_behind,
+        settings.unlocked_button_y,
+        settings.unlocked_button_skin_text,
+        menu_button_font,
+        1,
+        empty,
+        settings.menu_travel_time,
+        settings.menu_buttons_x,
+        settings.unlocked_button_y
+    )
+    
+end
+
+function gameClass:check_and_unlock_theme()
+    if not (settings.coins == settings.unlock_themes_at[settings.unlock_which_theme]) then
+        return
+    end
+    local count = 0
+    for i=1,#settings.themes_unlocked do
+        if not settings.themes_unlocked[i] then count = count + 1 end end
+    if count == 0 then return end
+                
+    
+    settings.unlock_which_theme = settings.unlock_which_theme + 1
+    
+    local tbool = true
+    while tbool do
+        local pos = math.random(1,#settings.themes_unlocked)
+        tbool = settings.themes_unlocked[pos]
+        settings.themes_unlocked[pos] = true
+    end
+    
+    self.unlocked_button = buttonClass(
+        settings.menu_start_behind,
+        settings.unlocked_button_y,
+        settings.unlocked_button_theme_text,
+        menu_button_font,
+        1,
+        empty,
+        settings.menu_travel_time,
+        settings.menu_buttons_x,
+        settings.unlocked_button_y
+    )
+
 end
 
 function gameClass:update_gameover(dt)
@@ -21,11 +92,8 @@ function gameClass:update_gameover(dt)
     self.gameover_main:update(dt)
     self.gameover_score:update(dt)
     self.gameover_highscore:update(dt)
-    -- display score
-    -- maybe time played
-    -- max score but i have to implement that
-    -- definitely need to save max score here
-    -- handling the touches
+    if self.unlocked_button then self.unlocked_button:update(dt) end
+
     local pressed
     if osString == "Windows " or osString =="Linux" or osString =="OS X" then
         pressed = love.mouse.isDown(1)
@@ -37,11 +105,6 @@ function gameClass:update_gameover(dt)
         and application.current:instanceOf(gameClass) then
         application:restart_game()
     end
-
-
-
-
-
 end
 
 function gameClass:init_gameover()
@@ -95,5 +158,7 @@ function gameClass:init_gameover()
                             settings.gameover_first_score_y +
                         settings.gameover_spacing
                             )
-        
+    
+    self:check_and_unlock_skin()
+    self:check_and_unlock_theme()
 end

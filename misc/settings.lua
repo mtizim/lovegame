@@ -122,19 +122,32 @@ settings = {
     controller_size_max = 121,
     controller_size_min = 60,
 
-    collectible_fade_time = 3, -- inverse of the actual time in s
+    collectible_fade_time = 4, -- inverse of the actual time in s
                                  -- so it's lighter
     collectible_fadein = 2, --same as above                                 
     collectible_size = 7,
 
     coin_time = 6,
+    coin_prob = 0.25,
     coin_x = 15                                                                      + 15,
     coin_y = 15                                                                      + 15,    
     coin_scale = 1.5,
+    coin_scale_game = 1.5,
     coin_display_time = 2,
-    coin_prob = 0.25,
     -- dynamically edited later on
     coin_font_size = 12,
+
+    unlocked_button_y =2/5 * window_height                                            +15,
+    unlocked_button_theme_text = "theme unlocked!",
+    unlocked_button_skin_text = "skin unlocked!",
+
+    unlock_at = {
+        3,7,12,18,25,33,
+        42,52,63,75,88,102,117
+    },
+    unlock_themes_at = {
+        20,50,80
+    },
 
     font = "Geo.otf",
     --defaults
@@ -157,8 +170,8 @@ settings = {
         false,
         false
     },
-    fill_unlocked = false,
-
+    unlock_which = 1,
+    unlock_which_theme = 1,
     coins = 0,
     -- main font
 }
@@ -201,7 +214,8 @@ function read_settings()
                         tostring(valtab[i] or settings.themes_unlocked[i - n + 1]) == "true"
                 end
                 local n = n + #settings.themes_unlocked 
-                settings.fill_unlocked = tostring(valtab[n] or settings.fill_unlocked) == "true"
+                settings.unlock_which = tonumber(valtab[n]) or settings.unlock_which
+                settings.unlock_which_theme = tonumber(valtab[n]) or settings.unlock_which_theme
 
             end
         file:close()
@@ -235,9 +249,10 @@ function save_settings()
         file:write(tostring(val))
             file:write("\n")
     end
-    file:write(tostring(settings.fill_unlocked))
+    file:write(tostring(settings.unlock_which))
+        file:write("\n")
+    file:write(tostring(settings.unlock_which_theme))
         file:write("\n")
     file = nil
 end
-
 read_settings()
