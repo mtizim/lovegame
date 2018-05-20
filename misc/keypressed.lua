@@ -22,6 +22,7 @@ function escape_pressed()
                 application.current.visual_menu.open then
             application.current.visual_menu:revert()
             application.current.themes:revert()
+            application.current.highscore:revert()
         end
     end
 

@@ -1,6 +1,13 @@
 -- global
 -- it's a collection of magic values 
 settings = {
+    game_name = "lasers!",
+    game_name_size = window_height /5,
+    my_name = "mtizim",
+    my_name_x = window_width                                    - 15,
+    --paused_main_font_size       \/\/\/\/\/\/\/\/
+    my_name_y = window_height    - window_height/12             - 15,
+
     --should be constants
     -- after this much delay the game will pause
     pause_dt = 0.2,
@@ -13,6 +20,8 @@ settings = {
     menu_buttons_x = window_height / 12                         + 15,
     menu_buttons_spacing = window_height / 7,
     menu_buttons_first_y = window_height * 1 /16                + 15,
+    menu_highscore_y = window_height * 4/20                     + 15,
+    menu_highscore_font_size = window_height  / 12,
     menu_start_text = "start",
     menu_settings_text = "settings",
     menu_controller_size_text = "joy size",
@@ -23,6 +32,7 @@ settings = {
     menu_settings_behind = window_width * 9/6 , --same as menu_start_behind
     menu_settings_first_y = window_height * 3/6                 + 15,
     menu_settings_x = window_width * 58/60                      - 15,
+    menu_name_y = window_height / 2/20                          + 15,
     menu_settings_on_text = "on",
     menu_settings_off_text= "off",
     menu_settings_remove_highscore_text = "reset highscore",
@@ -36,13 +46,14 @@ settings = {
     menu_themes_y = window_height * 4/5                         - 15,
     
     visual_menu_first_x = window_width *0                       + 15,
-    visual_menu_btn_size = window_width /10,
+    visual_menu_wrap =5,
+    visual_menu_wrap_themes = 2,
+    visual_menu_btn_size = window_width /13,
     visual_menu_btn_spacing =0,-- window_width / 200 ,
-    vixual_menu_btns_y = window_height - window_width/10        - 15,
+    theme_button_spacing = window_width / 80,
+    visual_menu_btns_y = window_height - window_width/10          ,
     pl_btn_travel_time = 0.3,
     pl_btn_line_width = 2,
-    fill_btn_txt = "fill",
-    fill_btn_inactive_a = 0.5,
     -- menu settings font size       \/\/\/\/\/\/\/\/\/\/\/
     themes_act_ypos = window_height - window_height * 8 /80     - 15,
     
@@ -50,7 +61,7 @@ settings = {
     gameover_scores_x = window_width * 50/52                    - 15,
     gameover_first_score_y = window_height * 1/20               + 15,
     gameover_spacing = window_height * 3/20,
-    gameover_score_text = "score",
+    gameover_score_text = "score: ",
     gameover_highscore_text = "highscore: ",
 
     unpause_text = "stopped",
@@ -67,7 +78,7 @@ settings = {
     player_maxspeed = 250,
     walldamp = 0.4,
 
-    lineball_width = 1,
+    lineball_width = 2,
 
     laser_stay_base = 1.5,
     -- there is a laser tim adjusting function in game.lua
@@ -129,15 +140,15 @@ settings = {
 
     coin_time = 6,
     coin_prob = 0.25,
-    coin_x = 15                                                                      + 15,
-    coin_y = 15                                                                      + 15,    
+    coin_x = 15                                                 + 15,
+    coin_y = 15                                                 + 15,    
     coin_scale = 1.5,
     coin_scale_game = 1.5,
     coin_display_time = 2,
     -- dynamically edited later on
     coin_font_size = 12,
 
-    unlocked_button_y =2/5 * window_height                                            +15,
+    unlocked_button_y =2/5 * window_height                      + 15,
     unlocked_button_theme_text = "theme unlocked!",
     unlocked_button_skin_text = "skin unlocked!",
 
@@ -155,20 +166,33 @@ settings = {
     controller_size = 60,
     draw_controller = true,
     highscore = 0,
-    player_fill_mode = "line",
-    player_model = "ball",
+    player_model = "ball_fill",
     skins_unlocked = {
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
     },
     themes_unlocked ={
-        false,
-        false
+        true,
+        true,
+        true,
     },
     unlock_which = 1,
     unlock_which_theme = 1,
@@ -179,9 +203,11 @@ settings = {
 settings.score_font_size = window_height
 score_font=love.graphics.newFont(settings.font,settings.score_font_size)
 menu_button_font=love.graphics.newFont(settings.font,settings.menu_button_font_size)
+menu_highscore_font=love.graphics.newFont(settings.font,settings.menu_highscore_font_size)
 menu_settings_font =love.graphics.newFont(settings.font,settings.menu_settings_font_size)
 unpause_font =love.graphics.newFont(settings.font,settings.unpause_font_size)
 paused_main_font=love.graphics.newFont(settings.font,settings.paused_main_font_size)
+game_name_font=love.graphics.newFont(settings.font,settings.game_name_size)
 
 -- changeable ones that need to be saved
 function read_settings()
@@ -200,10 +226,9 @@ function read_settings()
                 settings.controller_size = tonumber(valtab[2]) or settings.controller_size
                 settings.draw_controller = (tostring(valtab[3]) == "true") or settings.draw_controller
                 settings.highscore = tonumber(valtab[4]) or settings.highscore
-                settings.player_fill_mode = tostring(valtab[5] or settings.player_fill_mode)
-                settings.player_model = tostring(valtab[6] or settings.player_model)
-                settings.coins = tonumber(valtab[7]) or 0
-                local n = 8
+                settings.player_model = tostring(valtab[5] or settings.player_model)
+                settings.coins = tonumber(valtab[6]) or 0
+                local n = 7
                 for i=n,#settings.skins_unlocked + n - 1 do
                     settings.skins_unlocked[i - n + 1] = 
                         tostring(valtab[i] or settings.skins_unlocked[i - n + 1]) == "true"
@@ -235,8 +260,6 @@ function save_settings()
         file:write("\n")
     file:write(tostring(settings.highscore or 0))
         file:write("\n")
-    file:write(tostring(settings.player_fill_mode))
-        file:write("\n")
     file:write(tostring(settings.player_model))
         file:write("\n")
     file:write(tostring(settings.coins))
@@ -255,4 +278,5 @@ function save_settings()
         file:write("\n")
     file = nil
 end
+save_settings()
 read_settings()

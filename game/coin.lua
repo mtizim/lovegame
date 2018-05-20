@@ -57,6 +57,7 @@ function coinClass:draw()
     local ox,oy = coin_image:getDimensions()
     local x = self.x - ox/2 * settings.coin_scale_game
     local y = self.y - oy/2 * settings.coin_scale_game
+    love.graphics.setColor(gold[1],gold[2],gold[3],self.alpha)
     love.graphics.draw(coin_image,x,y,0,settings.coin_scale_game,
         settings.coin_scale_game)
 end

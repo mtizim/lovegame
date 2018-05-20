@@ -1,7 +1,7 @@
-pl_model_btnClass = Class("playermode_button")
+theme_btnClass = Class("theme_button")
 
 -- a backgroundless button because i like those
-function pl_model_btnClass:init(x,y,w,playermodel,
+function theme_btnClass:init(x,y,w,theme_number,
                           dest_time,dest_x,dest_y)
     self.x = x
     self.y = y
@@ -11,12 +11,11 @@ function pl_model_btnClass:init(x,y,w,playermodel,
     self.dest_x = dest_x
     self.dest_y = dest_y
     self.time = 0
-    self.rot = 0
     self.enabled = true
-    self.playermodel = playermodel
+    self.theme_number = theme_number
 end
 
-function pl_model_btnClass:interpolate(dt)
+function theme_btnClass:interpolate(dt)
     self.x = self.begin[1] + 
             (self.dest_x - self.begin[1])*self.time/self.dest_time
     self.y = self.begin[2] + 
@@ -24,15 +23,14 @@ function pl_model_btnClass:interpolate(dt)
     self.time = self.time + dt
 end
 
-function pl_model_btnClass:revert()
+function theme_btnClass:revert()
     self.time = 0
     local t_begin = {self.begin[1],self.begin[2]}
     self.begin = {self.dest_x,self.dest_y}
     self.dest_x,self.dest_y = t_begin[1],t_begin[2]
 end
 
-function pl_model_btnClass:update(dt)
-    self.rot = (self.rot + dt * 0.2 * 3.14) % 6.28
+function theme_btnClass:update(dt)
     local press_state
     local press_x
     local press_y
@@ -51,9 +49,15 @@ function pl_model_btnClass:update(dt)
        press_y > self.y and press_y < self.y + self.width
        and (not button_cooldown or button_cooldown < 0) then
             button_cooldown = settings.button_cooldown
-            settings.player_model = self.playermodel 
+
+            settings.theme_number = self.theme_number
+            settings.theme = theme_names[settings.theme_number]
+            -- change the visible ones
+            application.current.theme = themes[settings.theme]
+            application.current.game_bg.theme = themes[settings.theme]
             save_settings()
     end
+
     if self.time < self.dest_time then
         self:interpolate(dt)
     else
@@ -63,14 +67,18 @@ function pl_model_btnClass:update(dt)
     end
 end
 
-function pl_model_btnClass:draw(color, model_size)
-    love.graphics.setColor(color)
+function theme_btnClass:draw(model_size)
     love.graphics.setLineWidth(settings.pl_btn_line_width)
     -- love.graphics.rectangle("line",self.x,self.y,self.width,self.width)
     if self.unlocked then 
-        drawable[self.playermodel].draw(self.x + self.width/2,
-                                        self.y + self.width/2,
-                                        self.rot,model_size,self.playermodel_mode)
+        love.graphics.setColor(themes[theme_names[self.theme_number]].primary)
+        love.graphics.polygon("fill",self.x,self.y,self.x + self.width,self.y,self.x,self.y + self.width)
+        love.graphics.setColor(themes[theme_names[self.theme_number]].secondary)
+        love.graphics.polygon("fill",self.x + self.width ,self.y + self.width,
+                        self.x + self.width,self.y,self.x,self.y + self.width)
+        local lw = love.graphics.getLineWidth() /2
+        love.graphics.rectangle("line",self.x + lw ,self.y + lw,
+                self.width - lw,self.width - lw)
     else
         -- yo magic number here and it's not gonna make it to the settings
         draw_lock(self.x + self.width/2,

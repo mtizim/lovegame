@@ -42,21 +42,43 @@ function main_menuClass:init()
                             settings.menu_themes_y
                             )
 
+    self.name = buttonClass(settings.menu_settings_behind,
+                            settings.menu_name_y,               
+                            settings.game_name,
+                            game_name_font,
+                            1,
+                            empty,
+                            settings.menu_travel_time,
+                            settings.gameover_scores_x,
+                            settings.menu_name_y)
+    self.name:update_textshift()
+    self.my_name = buttonClass(settings.menu_settings_behind,
+                            settings.my_name_y,               
+                            settings.my_name,
+                            paused_main_font,
+                            0.2,
+                            empty,
+                            settings.menu_travel_time,
+                            settings.my_name_x,
+                            settings.my_name_y)
+    self.my_name:update_textshift()
+        
+
     local gameover_highscore_text = settings.gameover_highscore_text .. " "
                                    .. settings.highscore
     local highscore_alpha = 1
     if settings.highscore == 0 then highscore_alpha = 0 end
     self.highscore = buttonClass(settings.menu_settings_behind,
-                            settings.gameover_first_score_y,              
+                            settings.menu_highscore_y,              
                             gameover_highscore_text,
-                            menu_button_font, --might be ok
+                            menu_highscore_font, --might be ok
                             highscore_alpha,
                             empty,
                             settings.menu_travel_time,
-                            settings.gameover_scores_x -
-                    menu_button_font:getWidth(gameover_highscore_text),
-                            settings.gameover_first_score_y
+                            settings.gameover_scores_x,
+                            settings.menu_highscore_y
                             )
+    self.highscore:update_textshift()
 end
 
 function start_game()
@@ -72,19 +94,21 @@ function open_visual_menu()
             elf:revert_settings()
         end
         elf.themes:revert()
+        elf.highscore:revert()
     end
 end
 
 -- i could refactor some code or do this
-function update_themes()
-    application.current.game_bg.theme = themes[settings.theme]
-end
+-- function update_themes()
+--     application.current.game_bg.theme = themes[settings.theme]
+-- end
 
 function toggle_settings()
     local elf = application.current
     if not elf.settings_bool then
         if elf.visual_menu and elf.visual_menu.open then 
             elf.visual_menu:revert()
+            elf.highscore:revert()
             elf.themes:revert()
         end
         --fuck style here
@@ -205,7 +229,6 @@ function main_menuClass:revert_settings()
     self.controller_size.enabled = false          
     self.controller.enabled = false
 end
-    
 
 function main_menuClass:draw()
     self.game_bg:draw()
@@ -213,6 +236,8 @@ function main_menuClass:draw()
     self.settings:draw()
     self.themes:draw()
     self.highscore:draw(themes[settings.theme].highscore)
+    self.name:draw()
+    self.my_name:draw()
     if self.visual_menu then self.visual_menu:draw() end
     if self.controller_size then 
             self.controller_size:update_textshift()
@@ -243,6 +268,8 @@ function main_menuClass:update(dt)
     self.settings:update(dt)
     self.highscore:update(dt)
     self.themes:update(dt)
+    self.name:update(dt)
+    self.my_name:update(dt)
     if self.visual_menu then self.visual_menu:update(dt) end
     if self.controller_size then
         self.controller_size:update(dt)

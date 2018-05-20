@@ -149,7 +149,7 @@ function gameClass:update_normal(dt)
             self.missiles_timetonext = self.missiles_timetonext +
                  settings.triplelaser_missiles_inc
             self.inverted_laser_timetonext = self.inverted_laser_timetonext +
-                 settings.triplelaser_stay_time
+                 settings.triplelaser_stay_time * 2
         end
 
         if self.player.score >= settings.missile_min_score and
@@ -325,8 +325,9 @@ function gameClass:draw_coins()
         local x = coin_image:getWidth() * settings.coin_scale +  settings.coin_x 
         local y = settings.coin_y  -  0.1 * coin_image:getHeight() * settings.coin_scale
         love.graphics.setFont(coin_font)
-        love.graphics.setColor(self.theme.coin)
+        love.graphics.setColor(gold)
         love.graphics.draw(coin_image,settings.coin_x,settings.coin_y,0,settings.coin_scale)
+        love.graphics.setColor(self.theme.coin)
         love.graphics.print(settings.coins,x,y)
     end
 end

@@ -1,7 +1,7 @@
 Class = require("dependencies.30log")
 hc = require("dependencies.hardoncollider")
 polygon = require("dependencies.hardoncollider.polygon")
--- inspect = require("inspect")
+inspect = require("inspect")
 
 osString = love.system.getOS( )
 window_width, window_height = love.graphics.getDimensions()
@@ -19,6 +19,7 @@ require("game.coin")
 require("misc.helpers")
 require("menus.game_background")
 require("menus.change_player_button")
+require("menus.theme_button")
 require("menus.visual_menu")
 require("menus.main_menu")
 require("menus.button")
@@ -43,7 +44,6 @@ DISPLAY_FRAMES = false
 
 
 function love.load()
-
     coin_image = love.graphics.newImage("coin.png")
     settings.coin_font_size = coin_image:getHeight() * settings.coin_scale
     coin_font = love.graphics.newFont(settings.font,settings.coin_font_size)

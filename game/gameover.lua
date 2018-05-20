@@ -16,8 +16,8 @@ function gameClass:draw_gameover()
 end
 
 function gameClass:check_and_unlock_skin()
-    print(settings.coins,settings.unlock_at[settings.unlock_which])
-    if not (settings.coins == settings.unlock_at[settings.unlock_which]) then
+    if (settings.unlock_which > #settings.unlock_at) or
+    not (settings.coins >=(settings.unlock_at[settings.unlock_which] or 99999)) then
         return
     end
     local count = 0
@@ -36,7 +36,7 @@ function gameClass:check_and_unlock_skin()
     end
 
     self.unlocked_button = buttonClass(
-        settings.menu_start_behind,
+        settings.menu_start_behind * 2,
         settings.unlocked_button_y,
         settings.unlocked_button_skin_text,
         menu_button_font,
@@ -50,7 +50,8 @@ function gameClass:check_and_unlock_skin()
 end
 
 function gameClass:check_and_unlock_theme()
-    if not (settings.coins == settings.unlock_themes_at[settings.unlock_which_theme]) then
+    if  (settings.unlock_which_theme > #settings.unlock_at) or
+    not (settings.coins >= (settings.unlock_themes_at[settings.unlock_which_theme] or 99999)) then
         return
     end
     local count = 0
@@ -69,7 +70,7 @@ function gameClass:check_and_unlock_theme()
     end
     
     self.unlocked_button = buttonClass(
-        settings.menu_start_behind,
+        settings.menu_start_behind * 2,
         settings.unlocked_button_y,
         settings.unlocked_button_theme_text,
         menu_button_font,
@@ -108,6 +109,7 @@ function gameClass:update_gameover(dt)
 end
 
 function gameClass:init_gameover()
+    self.coin_display_time = 0.1
     if self.highscore_bool then
             settings.highscore = self.player.score
             save_settings()
