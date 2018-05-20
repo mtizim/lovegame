@@ -61,6 +61,9 @@ function triplelaserClass:update(dt)
     end
 
     if self.spawned_all and self.three.destroyed then
+        self.one = nil
+        self.two = nil
+        self.three = nil
         self.destroyed = true
     end
 

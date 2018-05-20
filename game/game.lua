@@ -22,6 +22,7 @@ function gameClass:init()
     self.inverted_laser_timetonext = settings.inverted_laser_delay
     self.missiles_timetonext = settings.missile_delay
     self.triplelaser_timetonext = settings.triplelaser_delay
+    self.rotatinglaser_timetonext  = settings.rotatinglaser_delay
 
     self.coins = 0
     self.coin_display_time = 0
@@ -125,6 +126,7 @@ function gameClass:update_normal(dt)
     self.inverted_laser_timetonext = math.max(0,self.inverted_laser_timetonext - dt)
     self.missiles_timetonext = math.max(0,self.missiles_timetonext - dt )
     self.triplelaser_timetonext = math.max(0,self.triplelaser_timetonext - dt)
+    self.rotatinglaser_timetonext = math.max(0,self.rotatinglaser_timetonext - dt)
     self.coin_display_time = math.max(0,self.coin_display_time - dt)
     self.laser_every_timer = self.laser_every_timer + dt
 
@@ -140,7 +142,7 @@ function gameClass:update_normal(dt)
         self.laser_every_timer = 0
 
         -- inverted and missiles spawn with normal
-        -- missiles
+        -- triple laser
         if self.player.score >= settings.triplelaser_min_score and 
         math.random() < settings.triplelaser_prob and
         self.triplelaser_timetonext <= 0 then
@@ -151,7 +153,7 @@ function gameClass:update_normal(dt)
             self.inverted_laser_timetonext = self.inverted_laser_timetonext +
                  settings.triplelaser_stay_time * 2
         end
-
+        -- missiles
         if self.player.score >= settings.missile_min_score and
         math.random() < settings.missile_prob and
         self.missiles_timetonext <= 0 then
@@ -160,6 +162,21 @@ function gameClass:update_normal(dt)
             self.inverted_laser_timetonext = math.max(settings.missiles_lifetime,
                                                       self.inverted_laser_timetonext)
         end
+        -- rotating_laser
+        if self.player.score >= settings.rotatinglaser_min_score and
+        math.random() < settings.rotatinglaser_prob and
+            self.rotatinglaser_timetonext <= 0 then
+            self.rotatinglaser_timetonext = settings.rotatinglaser_delay
+            self.inverted_laser_timetonext = math.max(
+                settings.rotatinglaser_duration + settings.rotatinglaser_appear,
+                self.inverted_laser_timetonext)
+            self.triplelaser_timetonext = math.max(
+                settings.rotatinglaser_duration + settings.rotatinglaser_appear,
+                self.triplelaser_timetonext
+            )
+            self.enemies:add(rotating_laserClass(self.collider,2*math.pi*math.random()))
+        end
+
         --inverted lasers
         if self.player.score >= settings.inverted_laser_min_score and
                 math.random() < settings.inverted_laser_prob and

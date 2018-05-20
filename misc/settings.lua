@@ -126,6 +126,14 @@ settings = {
     triplelaser_min_score = 10,
     triplelaser_stay_time = 2,
 
+    rotatinglaser_rps = math.pi * 2,
+    rotatinglaser_appear = 1,
+    rotatinglaser_duration = 2,
+    rotatinglaser_collision_timer = 1.44,
+    rotatinglaser_delay = 5,
+    rotatinglaser_min_score = 20,
+    rotatinglaser_prob = 0.15,
+
     -- now the controller controls vx vy directly
     -- controller_mul = 500000, -- should be about 10 * maxspeed
     controller_dotradius = 5, -- 10 for mobile
