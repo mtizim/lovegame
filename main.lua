@@ -1,11 +1,11 @@
 Class = require("dependencies.30log")
 hc = require("dependencies.hardoncollider")
 polygon = require("dependencies.hardoncollider.polygon")
-inspect = require("inspect")
+-- inspect = require("inspect")
 
 osString = love.system.getOS( )
 window_width, window_height = love.graphics.getDimensions()
-
+max = 2 * math.sqrt(window_height ^ 2 + window_width ^2)
 
 require("misc.themes")
 require("misc.settings")
@@ -64,6 +64,7 @@ if DISPLAY_FRAMES then delta_time, total_time = 0 , 0 end
 
 function love.update(dt)
     -- dt = dt*10
+    -- print(collectgarbage("count"))
     application:update(dt)
     -- print(collectgarbage("count"))
     

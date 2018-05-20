@@ -51,7 +51,7 @@ function gameClass:new_laser(width,height,time,r_time)
                           - settings.laser_random_r_deviation
     local laser = laserClass(x,y,r,
                              width,height,
-                             width, height * 100,
+                             width, max,
                              time,r_time,
                              self.collider)
     self.enemies:add(laser)
@@ -251,7 +251,7 @@ end
 --Updates appropriate objects
 function gameClass:update(dt)
     --joystick reaction
-    -- self.player.alive = true
+    self.player.alive = true
     
     -- if something is stopping the drawing or if the game is really slow
     

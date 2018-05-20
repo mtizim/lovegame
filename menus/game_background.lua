@@ -43,7 +43,7 @@ function game_backgroundClass:new_laser(width,height,time,r_time,color,explodedc
                           - settings.laser_random_r_deviation
     local laser = laserClass(x,y,r,
                              width,height,
-                             width, height * 100,
+                             width, max,
                              time,r_time,
                              self.collider)
     self.enemies:add(laser)

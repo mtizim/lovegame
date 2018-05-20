@@ -131,7 +131,7 @@ end
 drawable.star_hypno = {}
 function drawable.star_hypno.draw(x,y,rot,rad)
     drawable.star.draw(x,y,rot,rad)
-    drawable.star.draw(x,y,rot + math.pi/2,rad/1.41)
+    drawable.star.draw(x,y,rot + math.pi/2,rad/2)
 end
 
 drawable.triangle_fill = {}
