@@ -44,7 +44,7 @@ function linkedlistClass:update_forall(dt)
                 else 
                     before.next = current.next
                     current.value = nil
-                    local altbefore = before
+                    altbefore = before
                 end
                 self.length = self.length - 1
             end
@@ -52,6 +52,16 @@ function linkedlistClass:update_forall(dt)
             current = current.next
         end
     end
+end
+
+function linkedlistClass:calc_len()
+    local i = 0
+    local current = self.head
+    while current do
+        current = current.next
+         i = i + 1
+    end
+    return i
 end
 
 function linkedlistClass:remove(i)

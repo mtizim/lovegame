@@ -97,7 +97,7 @@ settings = {
     -- 3 means that the random bounding box is from 1/3 screen width and height
     inverted_laser_stay = 2,
     inverted_laser_min_score = 15,
-    inverted_laser_prob = 0.17, -- chance to spawn on normal laser spawn
+    inverted_laser_prob = 0.20, -- chance to spawn on normal laser spawn
     inverted_laser_displ = 3,
     inverted_laser_gap = 100,
     inverted_laser_width = 1000,
@@ -108,7 +108,7 @@ settings = {
     missile_disappear_time = 0.5,
     missile_force_mul = 200,
     missile_min_score = 5,
-    missile_prob = 0.30, -- same as inverted laser prob
+    missile_prob = 0.34,
     missiles_lifetime = 3,
     missile_incut = 20,
     missile_delay = 3.7,
@@ -121,18 +121,18 @@ settings = {
     --increments missile timer
     triplelaser_missiles_inc = 3,
     triplelaser_area = 3,
-    triplelaser_prob = 0.17,
+    triplelaser_prob = 0.2,
     triplelaser_collision_timer = 1.44,
     triplelaser_min_score = 10,
     triplelaser_stay_time = 2,
 
-    rotatinglaser_rps = math.pi * 2,
-    rotatinglaser_appear = 1,
-    rotatinglaser_duration = 2,
-    rotatinglaser_collision_timer = 1.44,
+    rotatinglaser_rps = math.pi/4,
+    rotatinglaser_appear = 1.5,
+    rotatinglaser_duration = 2.5,
+    rotatinglaser_collision_timer = 1.8,
     rotatinglaser_delay = 5,
     rotatinglaser_min_score = 20,
-    rotatinglaser_prob = 0.15,
+    rotatinglaser_prob = 0.2,
 
     -- now the controller controls vx vy directly
     -- controller_mul = 500000, -- should be about 10 * maxspeed
@@ -286,5 +286,4 @@ function save_settings()
         file:write("\n")
     file = nil
 end
-save_settings()
 read_settings()

@@ -23,10 +23,11 @@ require("menus.theme_button")
 require("menus.visual_menu")
 require("menus.main_menu")
 require("menus.button")
-require("game.inverted_laser")
-require("game.triple_laser")
-require("game.missile")
 require("game.laser")
+require("game.missile")
+require("game.triple_laser")
+require("game.inverted_laser")
+require("game.rotating_laser")
 require("menus.player_draw")
 require("game.player")
 require("misc.keypressed")
@@ -62,8 +63,9 @@ end
 if DISPLAY_FRAMES then delta_time, total_time = 0 , 0 end
 
 function love.update(dt)
+    -- dt = dt*10
     application:update(dt)
-
+    -- print(collectgarbage("count"))
     
     if DISPLAY_FRAMES then delta_time = dt; total_time =total_time + dt end
     if DEBUG then

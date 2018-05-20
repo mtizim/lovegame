@@ -150,8 +150,12 @@ function gameClass:update_normal(dt)
             self.enemies:add(triplelaserClass(self.collider))
             self.missiles_timetonext = self.missiles_timetonext +
                  settings.triplelaser_missiles_inc
-            self.inverted_laser_timetonext = self.inverted_laser_timetonext +
-                 settings.triplelaser_stay_time * 2
+            self.inverted_laser_timetonext = math.max(
+                 settings.triplelaser_stay_time * 2,
+                 self.inverted_laser_timetonext)
+            self.rotatinglaser_timetonext = math.max(
+                 settings.triplelaser_stay_time * 2,
+                 self.rotatinglaser_timetonext)
         end
         -- missiles
         if self.player.score >= settings.missile_min_score and
@@ -188,6 +192,12 @@ function gameClass:update_normal(dt)
             self.inverted_laser_timetonext = settings.inverted_laser_delay
             self:new_inverted_laser(settings.inverted_laser_stay,
                                     settings.laser_disappear_base)
+            self.triplelaser_timetonext = math.max(
+                    settings.inverted_laser_displ,
+                    self.triplelaser_timetonext)
+            self.rotatinglaser_timetonext = math.max(
+                    settings.inverted_laser_displ,
+                    self.rotatinglaser_timetonext)
         end
 
     end
@@ -260,6 +270,9 @@ function gameClass:update(dt)
         self:update_touch()
     end
 
+    if self.paused then
+        collectgarbage()
+    end
     
     if self.pause_button then
         self.main_button:update(dt)
