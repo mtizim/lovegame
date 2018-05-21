@@ -161,11 +161,11 @@ settings = {
     unlocked_button_skin_text = "skin unlocked!",
 
     unlock_at = {
-        3,7,12,18,25,33,
-        42,52,63,75,88,102,117
+        1,3,7,12,18,25,33,
+        42,52,63,75,88,102,117,133,150
     },
     unlock_themes_at = {
-        20,50,80
+        20,40,60,80,100
     },
 
     font = "Geo.otf",
@@ -177,30 +177,32 @@ settings = {
     player_model = "ball_fill",
     skins_unlocked = {
         true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
     },
     themes_unlocked ={
         true,
-        true,
-        true,
+        false,
+        false,
+        false,
+        false,
     },
     unlock_which = 1,
     unlock_which_theme = 1,
@@ -242,13 +244,17 @@ function read_settings()
                         tostring(valtab[i] or settings.skins_unlocked[i - n + 1]) == "true"
                 end
                 local n = n + #settings.skins_unlocked
+                settings.unlock_which = tonumber(valtab[n+1]) or settings.unlock_which
+                settings.unlock_which_theme = tonumber(valtab[n + 2]) or settings.unlock_which_theme
+                n = n + 2
                 for i=n,#settings.themes_unlocked + n - 1 do
+                    
                     settings.themes_unlocked[i - n + 1] =
                         tostring(valtab[i] or settings.themes_unlocked[i - n + 1]) == "true"
                 end
                 local n = n + #settings.themes_unlocked 
-                settings.unlock_which = tonumber(valtab[n]) or settings.unlock_which
-                settings.unlock_which_theme = tonumber(valtab[n]) or settings.unlock_which_theme
+               
+               
 
             end
         file:close()
@@ -276,14 +282,14 @@ function save_settings()
         file:write(tostring(val))
             file:write("\n")
     end
-    for _,val in pairs(settings.themes_unlocked) do
-        file:write(tostring(val))
-            file:write("\n")
-    end
     file:write(tostring(settings.unlock_which))
         file:write("\n")
     file:write(tostring(settings.unlock_which_theme))
         file:write("\n")
+    for _,val in pairs(settings.themes_unlocked) do
+        file:write(tostring(val))
+            file:write("\n")
+    end
     file = nil
 end
 read_settings()

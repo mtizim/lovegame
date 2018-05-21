@@ -251,7 +251,7 @@ end
 --Updates appropriate objects
 function gameClass:update(dt)
     --joystick reaction
-    self.player.alive = true
+    -- self.player.alive = true
     
     -- if something is stopping the drawing or if the game is really slow
     
