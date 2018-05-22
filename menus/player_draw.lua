@@ -153,7 +153,7 @@ drawable.pentagon = {}
 function drawable.pentagon.draw(x,y,rot,r)
     love.graphics.push()
         love.graphics.translate(x,y)
-        love.graphics.rotate(math.pi/2 - rot)
+        love.graphics.rotate(math.pi*6/5 - rot)
         love.graphics.polygon("line",
                               0, r,
                               r*(-0.951), r*0.309,
@@ -168,7 +168,7 @@ function drawable.pentagram_help.draw(x,y,rot,rad)
     local r = rad * 1.21
     love.graphics.push()
         love.graphics.translate(x,y)
-        love.graphics.rotate(math.pi/2 - rot)
+        love.graphics.rotate(math.pi*6/5 - rot)
         love.graphics.polygon("line",
                               0, r,
                               r*(-0.5877),r*(-0.809),

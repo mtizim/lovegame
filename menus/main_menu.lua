@@ -221,7 +221,7 @@ function change_controller_size()
     if not button_cooldown or button_cooldown < 0 then
         button_cooldown = settings.button_cooldown
         local elf = application.current
-        settings.controller_size = settings.controller_size + 10
+        settings.controller_size = settings.controller_size + 20
         if settings.controller_size > settings.controller_size_max then
             settings.controller_size = settings.controller_size_min
         end

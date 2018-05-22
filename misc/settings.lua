@@ -1,7 +1,7 @@
 -- global
 -- it's a collection of magic values 
 settings = {
-    paid = false,
+    paid = true,
     please_text = "please purchase the game \n if you're enjoying it!",
     game_name = "lasers!",
     game_name_size = window_height /5,
@@ -72,12 +72,12 @@ settings = {
     paused_main_y = window_height * 135/150                     - 15,
     paused_main_x = window_width * 50/52                        - 15,
 
-    offset = 15, --15 for mobile
-    player_size = 10,
-    player_collision_size = 5,
+    offset = 15 * window_height / 600, --15 for mobile
+    player_size = 10 * window_height / 600,
+    player_collision_size = 5 * window_height / 600,
     player_start_vx = 0,
     player_start_vy = 0,
-    player_maxspeed = 250,
+    player_maxspeed = 250 * window_height / 600,
     walldamp = 0.4,
 
     lineball_width = 2,
@@ -85,8 +85,8 @@ settings = {
     laser_stay_base = 1.5,
     -- there is a laser tim adjusting function in game.lua
     -- won't parametrize it here but remember about it being there
-    laser_width = 20, --25 for mobile?
-    laser_height = 100, -- 150 for mobile?
+    laser_width = 20 * window_height / 600, --25 for mobile?
+    laser_height = 100 * window_height / 600, -- 150 for mobile?
     laser_random_r_deviation = math.pi / 23,  -- +- that
     laser_collision_timer = 0.02,
     laser_disappear_base = 0.3,
@@ -101,12 +101,12 @@ settings = {
     inverted_laser_min_score = 15,
     inverted_laser_prob = 0.20, -- chance to spawn on normal laser spawn
     inverted_laser_displ = 3,
-    inverted_laser_gap = 100,
-    inverted_laser_width = 1000,
-    inverted_laser_length = 2000,
+    inverted_laser_gap = 100 * window_height / 600,
+    inverted_laser_width = 1000 * window_height / 600,
+    inverted_laser_length = 2000 * window_height / 600,
 
-    missile_height = 40,
-    missile_width = 10,
+    missile_height = 40  * window_height / 600,
+    missile_width = 10 * window_height / 600,
     missile_disappear_time = 0.5,
     missile_force_mul = 200,
     missile_min_score = 5,
@@ -138,10 +138,10 @@ settings = {
 
     -- now the controller controls vx vy directly
     -- controller_mul = 500000, -- should be about 10 * maxspeed
-    controller_dotradius = 5, -- 10 for mobile
+    controller_dotradius = 5 * window_height / 600, -- 10 for mobile
     controller_line = 1.2,  -- ok for mobile
-    controller_size_max = 121,
-    controller_size_min = 60,
+    controller_size_max = 201,
+    controller_size_min = 40,
 
     collectible_fade_time = 4, -- inverse of the actual time in s
                                  -- so it's lighter
@@ -173,7 +173,7 @@ settings = {
     font = "Geo.otf",
     --defaults
     theme_number = 1,
-    controller_size = 60,
+    controller_size = 100,
     draw_controller = true,
     highscore = 0,
     player_model = "ball_fill",
