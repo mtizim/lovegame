@@ -4,6 +4,7 @@ local white_transparent = {white[1],white[2],white[3], 0.1}
 local black = {0.1, 0.1 ,0.1}
 local black_transparent = {black[1],black[2],black[3], 0.2}
 local yellowish_white = {0.9,0.9,0.82}
+local yellow = {0.7,0.7,0}
 local blue = {0.1,0.1,0.9}
 local blue_less = {0.1,0.1,0.8}
 gold = {1,0.84,0}
@@ -92,7 +93,7 @@ themes["whiteredblack"] =
 }
 
 themes["impressionist_inv"] = {
-        primary = invert(corn_flower_blue),
+        primary = yellow,
         secondary = invert(crimson),
         laser = invert(crimson),
         laser_exploded = invert(orange),
@@ -100,7 +101,7 @@ themes["impressionist_inv"] = {
         controller = invert(black),
         controller_alpha = 0.7,
         boundaries = invert(orange),
-        background = invert(corn_flower_blue),
+        background = yellow,
         collectible = invert(gold),
         coin = invert(black),
         score = invert(black_transparent),

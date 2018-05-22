@@ -1,6 +1,8 @@
 -- global
 -- it's a collection of magic values 
 settings = {
+    paid = false,
+    please_text = "please purchase the game \n if you're enjoying it!",
     game_name = "lasers!",
     game_name_size = window_height /5,
     my_name = "mtizim",

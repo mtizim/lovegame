@@ -33,6 +33,30 @@ apk:
 		# @echo "Edit apktool.yml"
 		cp -f  ${APK_DIR}/apktool.yml ${APK_DIR}/love_decoded/apktool.yml
 		cp -f  ${APK_DIR}/AndroidManifest.xml ${APK_DIR}/love_decoded/AndroidManifest.xml
+
+		#icons
+		rm ${APK_DIR}/love_decoded/res/drawable-mdpi/love.png
+		rm ${APK_DIR}/love_decoded/res/drawable-xxxhdpi/love.png
+		rm ${APK_DIR}/love_decoded/res/drawable-hdpi/love.png
+		rm ${APK_DIR}/love_decoded/res/drawable-xxhdpi/love.png
+		rm ${APK_DIR}/love_decoded/res/drawable-xhdpi/love.png
+		rm ${APK_DIR}/love_decoded/build/apk/res/drawable-mdpi/love.png
+		rm ${APK_DIR}/love_decoded/build/apk/res/drawable-xxxhdpi/love.png
+		rm ${APK_DIR}/love_decoded/build/apk/res/drawable-hdpi/love.png
+		rm ${APK_DIR}/love_decoded/build/apk/res/drawable-xxhdpi/love.png
+		rm ${APK_DIR}/love_decoded/build/apk/res/drawable-xhdpi/love.png
+
+		cp icons/mdpi.png ${APK_DIR}/love_decoded/res/drawable-mdpi/love.png
+		cp icons/hdpi.png ${APK_DIR}/love_decoded/res/drawable-xxxhdpi/love.png
+		cp icons/xhdpi.png ${APK_DIR}/love_decoded/res/drawable-hdpi/love.png
+		cp icons/xxhdpi.png ${APK_DIR}/love_decoded/res/drawable-xxhdpi/love.png
+		cp icons/xxxhdpi.png ${APK_DIR}/love_decoded/res/drawable-xhdpi/love.png
+		cp icons/mdpi.png ${APK_DIR}/love_decoded/build/apk/res/drawable-mdpi/love.png
+		cp icons/hdpi.png ${APK_DIR}/love_decoded/build/apk/res/drawable-xxxhdpi/love.png
+		cp icons/xhdpi.png ${APK_DIR}/love_decoded/build/apk/res/drawable-hdpi/love.png
+		cp icons/xxhdpi.png ${APK_DIR}/love_decoded/build/apk/res/drawable-xxhdpi/love.png
+		cp icons/xxxhdpi.png ${APK_DIR}/love_decoded/build/apk/res/drawable-xhdpi/love.png
+
 		cd ${APK_DIR}/ ; \
 			apktool b -o muygame.apk love_decoded
 		#my alias is literally alias_name lmao

@@ -56,13 +56,26 @@ function main_menuClass:init()
                             settings.my_name_y,               
                             settings.my_name,
                             paused_main_font,
-                            0.2,
+                            0.7,
                             empty,
                             settings.menu_travel_time,
                             settings.my_name_x,
                             settings.my_name_y)
     self.my_name:update_textshift()
-        
+    if not settings.paid then
+        self.please = buttonClass(2 * settings.menu_start_behind,
+                            settings.menu_buttons_first_y +
+                        3 * settings.menu_buttons_spacing,               
+                            settings.please_text,
+                            paused_main_font,
+                            0.7,
+                            empty,
+                            settings.menu_travel_time,
+                            settings.menu_buttons_x,
+                            settings.menu_buttons_first_y +
+                        3 * settings.menu_buttons_spacing)
+        -- self.please:update_textshift()
+    end
 
     local gameover_highscore_text = settings.gameover_highscore_text .. " "
                                    .. settings.highscore
@@ -93,6 +106,7 @@ function open_visual_menu()
         if elf.settings_bool then
             elf:revert_settings()
         end
+        if not settings.paid then elf.please.alpha = 0 end
         elf.themes:revert()
         elf.highscore:revert()
     end
@@ -111,6 +125,7 @@ function toggle_settings()
             elf.highscore:revert()
             elf.themes:revert()
         end
+        if not settings.paid then elf.please.alpha = 0 end
         --fuck style here
         elf.remove_highscore_counter = settings.remove_highscore_counter
         elf.settings_bool = true
@@ -226,6 +241,7 @@ function main_menuClass:revert_settings()
     self.controller_size:revert()
     self.controller:revert()
     self.remove_highscore:revert()
+    if not settings.paid then elf.please.alpha = 0 end
     self.controller_size.enabled = false          
     self.controller.enabled = false
 end
@@ -238,6 +254,7 @@ function main_menuClass:draw()
     self.highscore:draw(themes[settings.theme].highscore)
     self.name:draw()
     self.my_name:draw()
+    if not settings.paid then self.please:draw() end
     if self.visual_menu then self.visual_menu:draw() end
     if self.controller_size then 
             self.controller_size:update_textshift()
@@ -270,6 +287,7 @@ function main_menuClass:update(dt)
     self.themes:update(dt)
     self.name:update(dt)
     self.my_name:update(dt)
+    if not settings.paid then self.please:update(dt) end
     if self.visual_menu then self.visual_menu:update(dt) end
     if self.controller_size then
         self.controller_size:update(dt)

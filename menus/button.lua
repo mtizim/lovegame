@@ -35,7 +35,6 @@ function buttonClass:revert()
     self.begin = {self.dest_x,self.dest_y}
     self.dest_x,self.dest_y = t_begin[1],t_begin[2]
     self.dest_x_preserve = self.dest_x
-    
 end
 
 function buttonClass:update(dt)
