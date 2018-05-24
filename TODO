@@ -1,1 +1,5 @@
-    putting the game on the play store
+com.lasers_paid: 6 -- the free one
+com.lasers_support: 5 -- the paid one
+
+change the name and the version in androidmanifest on build
+swap the keystores on build

@@ -52,3 +52,6 @@ apk:
 		#my alias is literally alias_name lmao
 		cd ${APK_DIR}/ ; \
 			jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore game.keystore ${NAME}.apk alias_name
+		rm -f ${APK_DIR}/z_muygame.apk
+		cd ${APK_DIR}/ ; \
+			zipalign 4 muygame.apk z_muygame.apk
