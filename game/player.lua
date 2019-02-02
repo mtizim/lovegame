@@ -1,4 +1,4 @@
--- A big one but it's the main thing 
+-- A big one but it's the main thing
 playerClass = Class("Player")
 
 function playerClass:init( x, y,
@@ -72,7 +72,6 @@ function playerClass:update(dt,box_array)
     self.vy = self.vy + self.ay * dt
     self:normalize_speed()
     self:check_bounds_rect_bounce(box_array)
-    
 end
 
 -- Draws the player
