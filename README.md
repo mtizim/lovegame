@@ -1,8 +1,8 @@
-# lovegame
-I'm trying to rewrite a game i made a long time ago which was spaghetti code.
-Also i lost the source code for that.
-It's a completely new project.
+# Lasers!
+https://play.google.com/store/apps/details?id=com.mtizim.lasers_paid
+A basic single stick dodger.
+I'm rather proud of the aesthetics on this one.
 
-I'm pretty proud of how it's coming out, and for now i think it's actually bug-free.
-It's certain;y better than the old game which was made in one file.
-Of course, there are limited means of interaction right now.
+The architecture on this project needs a major rework, but I've long since moved on.
+
+Can not be build using this repository, i have some secret buildscripts that do that automatically with signing.
