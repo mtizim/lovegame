@@ -2,3 +2,7 @@ pak/*
 pak
 pak.love
 kys.lua
+node_modules/
+web/*
+web/
+game.love

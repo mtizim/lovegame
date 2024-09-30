@@ -2,7 +2,7 @@ gameClass = Class("game")
 
 function gameClass:init()
     --initializing appropriate things
-    
+
     local x, y = window_width/2, window_height/2
     self.enemies = linkedlistClass()
     self.collectibles = linkedlistClass()
@@ -33,9 +33,9 @@ function gameClass:init()
     self.player = playerClass( x, y,
                                settings.player_start_vx,
                                settings.player_start_vy,
-                               0, 0, settings.player_size, 
+                               0, 0, settings.player_size,
                                settings.player_maxspeed,settings.walldamp,
-                               self.collider)    
+                               self.collider)
     self.paused = false
     self.highscore_bool = false
     self.pressed_before_bool = false
@@ -61,9 +61,9 @@ function gameClass:new_missiles(r_time)
     -- corners
     local first = math.random(4)
     local second = math.random(4)
-    if second == first then 
+    if second == first then
         local pm
-        if math.random() < 0.5 then 
+        if math.random() < 0.5 then
             pm = 1
         else
             pm = -1
@@ -84,7 +84,7 @@ function gameClass:new_missiles(r_time)
     if first == 4 or second == 4 then
         self.enemies:add(missileClass(window_width,window_height,r_time,self.collider))
     end
-    
+
 end
 
 function gameClass:new_inverted_laser(time,r_time)
@@ -110,19 +110,19 @@ function gameClass:update_normal(dt)
 
     --player
 
-    if (self.player.score > settings.highscore) then 
+    if (self.player.score > settings.highscore) then
         self.highscore_bool = true
     end
 
     local vx,vy,r = self.game_controller:update()
-    if r then 
+    if r then
         self.player.maxspeed = settings.player_maxspeed * r
     end
     self.player.vx = vx or self.player.vx
     self.player.vy = vy or self.player.vy
     self.player:update(dt,self.bounding_box)
 
-    -- timers    
+    -- timers
     self.inverted_laser_timetonext = math.max(0,self.inverted_laser_timetonext - dt)
     self.missiles_timetonext = math.max(0,self.missiles_timetonext - dt )
     self.triplelaser_timetonext = math.max(0,self.triplelaser_timetonext - dt)
@@ -143,7 +143,7 @@ function gameClass:update_normal(dt)
 
         -- inverted and missiles spawn with normal
         -- triple laser
-        if self.player.score >= settings.triplelaser_min_score and 
+        if self.player.score >= settings.triplelaser_min_score and
         math.random() < settings.triplelaser_prob and
         self.triplelaser_timetonext <= 0 then
             self.triplelaser_timetonext = settings.triplelaser_delay
@@ -241,7 +241,7 @@ function gameClass:adjust_laser_timer()
 end
 
 function gameClass:update_touch()
-    if osString == "Windows " or osString =="Linux" or osString =="OS X" then
+    if osString == "Windows" or osString =="Linux" or osString =="OS X" then
         self.pressed_before_bool = love.mouse.isDown(1)
     else
         self.pressed_before_bool = not not first -- cast to boolean
@@ -252,10 +252,10 @@ end
 function gameClass:update(dt)
     --joystick reaction
     -- self.player.alive = true
-    
+
     -- if something is stopping the drawing or if the game is really slow
-    
-    if dt > settings.pause_dt and self.player.alive then 
+
+    if dt > settings.pause_dt and self.player.alive then
         self:pause()
         return
     end
@@ -273,7 +273,7 @@ function gameClass:update(dt)
     if self.paused then
         collectgarbage()
     end
-    
+
     if self.pause_button then
         self.main_button:update(dt)
         self.pause_button:update(dt)
@@ -297,7 +297,7 @@ function gameClass:pause()
     self.pause_button = buttonClass(window_width/2 -
                     unpause_font:getWidth(settings.unpause_text)/2,
                             window_height/2 -
-                    settings.unpause_font_size * 0.5,              
+                    settings.unpause_font_size * 0.5,
                             settings.unpause_text,
                             unpause_font,
                             1,
@@ -309,7 +309,7 @@ function gameClass:pause()
                     settings.unpause_font_size * 0.5
                             )
     self.main_button = buttonClass(settings.paused_main_x,
-                            settings.paused_main_y,              
+                            settings.paused_main_y,
                             settings.paused_main_text,
                             paused_main_font,
                             1,
@@ -317,7 +317,7 @@ function gameClass:pause()
                             0,
                             settings.paused_main_x,
                             settings.paused_main_y
-                            )                
+                            )
     self.main_button:update_textshift()
 end
 
@@ -352,7 +352,7 @@ end
 
 function gameClass:draw_coins()
     if self.coin_display_time > 0 then
-        local x = coin_image:getWidth() * settings.coin_scale +  settings.coin_x 
+        local x = coin_image:getWidth() * settings.coin_scale +  settings.coin_x
         local y = settings.coin_y  -  0.1 * coin_image:getHeight() * settings.coin_scale
         love.graphics.setFont(coin_font)
         love.graphics.setColor(gold)

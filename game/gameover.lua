@@ -9,7 +9,7 @@ function gameClass:draw_gameover()
         end
         self.gameover_highscore:draw(color)
         -- same color since it makes sense
-        if self.unlocked_button then 
+        if self.unlocked_button then
             self.unlocked_button:draw(themes[settings.theme].beaten_highscore)
         end
     end
@@ -24,10 +24,10 @@ function gameClass:check_and_unlock_skin()
     for i=1,#settings.skins_unlocked do
         if not settings.skins_unlocked[i] then count = count + 1 end end
     if count == 0 then return end
-                
-    
+
+
     settings.unlock_which = settings.unlock_which + 1
-    
+
     local tbool = true
     while tbool do
         local pos = math.random(1,#settings.skins_unlocked)
@@ -46,7 +46,7 @@ function gameClass:check_and_unlock_skin()
         settings.menu_buttons_x,
         settings.unlocked_button_y
     )
-    
+
 end
 
 function gameClass:check_and_unlock_theme()
@@ -58,17 +58,17 @@ function gameClass:check_and_unlock_theme()
     for i=1,#settings.themes_unlocked do
         if not settings.themes_unlocked[i] then count = count + 1 end end
     if count == 0 then return end
-                
-    
+
+
     settings.unlock_which_theme = settings.unlock_which_theme + 1
-    
+
     local tbool = true
     while tbool do
         local pos = math.random(1,#settings.themes_unlocked)
         tbool = settings.themes_unlocked[pos]
         settings.themes_unlocked[pos] = true
     end
-    
+
     self.unlocked_button = buttonClass(
         settings.menu_start_behind * 2,
         settings.unlocked_button_y,
@@ -96,7 +96,7 @@ function gameClass:update_gameover(dt)
     if self.unlocked_button then self.unlocked_button:update(dt) end
 
     local pressed
-    if osString == "Windows " or osString =="Linux" or osString =="OS X" then
+    if osString == "Windows" or osString =="Linux" or osString =="OS X" then
         pressed = love.mouse.isDown(1)
     else
         pressed = not not first -- cast too boolean
@@ -116,7 +116,7 @@ function gameClass:init_gameover()
     end
 
     self.gameover_main = buttonClass(settings.menu_settings_behind,
-                            settings.paused_main_y,              
+                            settings.paused_main_y,
                             settings.paused_main_text,
                             paused_main_font,
                             1,
@@ -129,7 +129,7 @@ function gameClass:init_gameover()
     local gameover_score_text = settings.gameover_score_text .. " "
                                 .. self.player.score
     self.gameover_score = buttonClass(settings.menu_settings_behind,
-                            settings.gameover_first_score_y,              
+                            settings.gameover_first_score_y,
                             gameover_score_text,
                             menu_button_font, --might be ok
                             1,
@@ -149,7 +149,7 @@ function gameClass:init_gameover()
     if settings.highscore == 0 then highscore_alpha = 0 end
     self.gameover_highscore = buttonClass(settings.menu_settings_behind,
                             settings.gameover_first_score_y +
-                        settings.gameover_spacing,              
+                        settings.gameover_spacing,
                             gameover_highscore_text,
                             paused_main_font, --might be ok
                             highscore_alpha,
@@ -160,7 +160,7 @@ function gameClass:init_gameover()
                             settings.gameover_first_score_y +
                         settings.gameover_spacing
                             )
-    
+
     self:check_and_unlock_skin()
     self:check_and_unlock_theme()
 end

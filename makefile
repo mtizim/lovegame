@@ -1,5 +1,5 @@
 APK_DIR=../apkbuilding
-NAME=muygame
+NAME=lasers
 
 dev:
 		sudo luarocks install inspect
@@ -23,7 +23,17 @@ makelove:
 		zip -9 -r $(shell pwd)/game.love .
 		rm -rd pak/
 
-apk:	
+web: makelove
+		rm -r web
+		mkdir web
+		npx love.js game.love web -c -t ${NAME}
+		cp icons/512.png web/favicon.ico
+		cp -r webpatch/* web/
+		rm -rf web/theme/
+		cd web/ ;\
+		zip -9 -r lasers.zip *
+
+apk: makelove
 		rm -rf ${APK_DIR}/love_decoded
 		cd ${APK_DIR}/ ; \
 			apktool d -fs -o love_decoded love-11.1-android.apk

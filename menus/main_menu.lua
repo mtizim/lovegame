@@ -8,7 +8,7 @@ function main_menuClass:init()
     self.settings_bool = false
     self.remove_highscore_counter = settings.remove_highscore_counter
     self.start = buttonClass(settings.menu_start_behind,
-                            settings.menu_buttons_first_y,               
+                            settings.menu_buttons_first_y,
                             settings.menu_start_text,
                             menu_button_font,
                             1,
@@ -20,7 +20,7 @@ function main_menuClass:init()
 
     self.settings = buttonClass(settings.menu_start_behind,
                             settings.menu_buttons_first_y +
-                        settings.menu_buttons_spacing,               
+                        settings.menu_buttons_spacing,
                             settings.menu_settings_text,
                             menu_button_font,
                             1,
@@ -32,7 +32,7 @@ function main_menuClass:init()
                             )
 
     self.themes = buttonClass(settings.menu_start_behind,
-                            settings.menu_themes_y,               
+                            settings.menu_themes_y,
                             settings.menu_themes_text,
                             menu_button_font,
                             1,
@@ -43,7 +43,7 @@ function main_menuClass:init()
                             )
 
     self.name = buttonClass(settings.menu_settings_behind,
-                            settings.menu_name_y,               
+                            settings.menu_name_y,
                             settings.game_name,
                             game_name_font,
                             1,
@@ -53,7 +53,7 @@ function main_menuClass:init()
                             settings.menu_name_y)
     self.name:update_textshift()
     self.my_name = buttonClass(settings.menu_settings_behind,
-                            settings.my_name_y,               
+                            settings.my_name_y,
                             settings.my_name,
                             paused_main_font,
                             0.7,
@@ -65,7 +65,7 @@ function main_menuClass:init()
     if not settings.paid then
         self.please = buttonClass(2 * settings.menu_start_behind,
                             settings.menu_buttons_first_y +
-                        3 * settings.menu_buttons_spacing,               
+                        3 * settings.menu_buttons_spacing,
                             settings.please_text,
                             paused_main_font,
                             0.7,
@@ -82,7 +82,7 @@ function main_menuClass:init()
     local highscore_alpha = 1
     if settings.highscore == 0 then highscore_alpha = 0 end
     self.highscore = buttonClass(settings.menu_settings_behind,
-                            settings.menu_highscore_y,              
+                            settings.menu_highscore_y,
                             gameover_highscore_text,
                             menu_highscore_font, --might be ok
                             highscore_alpha,
@@ -120,7 +120,7 @@ end
 function toggle_settings()
     local elf = application.current
     if not elf.settings_bool then
-        if elf.visual_menu and elf.visual_menu.open then 
+        if elf.visual_menu and elf.visual_menu.open then
             elf.visual_menu:revert()
             elf.highscore:revert()
             elf.themes:revert()
@@ -130,7 +130,7 @@ function toggle_settings()
         elf.remove_highscore_counter = settings.remove_highscore_counter
         elf.settings_bool = true
         elf.controller_size = buttonClass(settings.menu_settings_behind,
-                            settings.menu_settings_first_y,               
+                            settings.menu_settings_first_y,
                             settings.menu_controller_size_text .. "  " ..
                         settings.controller_size,
                             menu_settings_font,
@@ -148,8 +148,8 @@ function toggle_settings()
         end
         elf.controller = buttonClass(settings.menu_settings_behind,
                             settings.menu_settings_first_y +
-                        settings.menu_settings_spacing,               
-                            settings.menu_controller_text .. " " .. 
+                        settings.menu_settings_spacing,
+                            settings.menu_controller_text .. " " ..
                         controller_state,
                             menu_settings_font,
                             1,
@@ -162,7 +162,7 @@ function toggle_settings()
 
         elf.remove_highscore = buttonClass(settings.menu_settings_behind,
                             settings.menu_settings_first_y +
-                       2 * settings.menu_settings_spacing,               
+                       2 * settings.menu_settings_spacing,
                             settings.menu_settings_remove_highscore_text,
                             menu_settings_font,
                             1,
@@ -171,7 +171,7 @@ function toggle_settings()
                             settings.menu_settings_x,
                             settings.menu_settings_first_y +
                        2 *  settings.menu_settings_spacing
-                            )                    
+                            )
     end
 end
 
@@ -191,7 +191,7 @@ function remove_highscore()
                 " (" .. elf.remove_highscore_counter .. ")"
         else
             elf.remove_highscore.text = settings.removed_highscore_text
-            
+
             reset_highscore()
             elf.highscore.alpha = math.min(settings.highscore,1)
             elf.highscore.text = settings.gameover_highscore_text .. " "
@@ -211,8 +211,8 @@ function toggle_draw_controller()
         else
             controller_state = settings.menu_settings_off_text
         end
-        application.current.controller.text = 
-            settings.menu_controller_text .. " " .. 
+        application.current.controller.text =
+            settings.menu_controller_text .. " " ..
             controller_state
     end
 end
@@ -242,7 +242,7 @@ function main_menuClass:revert_settings()
     self.controller:revert()
     self.remove_highscore:revert()
     if not settings.paid then elf.please.alpha = 0 end
-    self.controller_size.enabled = false          
+    self.controller_size.enabled = false
     self.controller.enabled = false
 end
 
@@ -256,7 +256,7 @@ function main_menuClass:draw()
     self.my_name:draw()
     if not settings.paid then self.please:draw() end
     if self.visual_menu then self.visual_menu:draw() end
-    if self.controller_size then 
+    if self.controller_size then
             self.controller_size:update_textshift()
         self.controller_size:draw()
             self.controller:update_textshift()
@@ -271,13 +271,13 @@ function main_menuClass:update(dt)
     if button_cooldown and button_cooldown > 0 then
         button_cooldown = button_cooldown - dt
     end
-    if self.remove_highscore and 
+    if self.remove_highscore and
             remove_highscore_start and self.time - remove_highscore_start >
         settings.remove_highscore_counter_reset then
         self.remove_highscore_counter = settings.remove_highscore_counter
         self.time = 0
         self.remove_highscore_start = nil
-        self.remove_highscore.text = 
+        self.remove_highscore.text =
             settings.menu_settings_remove_highscore_text
     end
     self.game_bg:update(dt)

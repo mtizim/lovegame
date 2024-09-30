@@ -12,7 +12,7 @@ end
 -- both ifs are the same thing for different platforms
 function gamecontrollerClass:update(dt)
     --windows/linux
-    if osString == "Windows " or osString =="Linux" or osString =="OS X" then
+    if osString == "Windows" or osString =="Linux" or osString =="OS X" then
         local mouse_state = love.mouse.isDown(1)
         if (not self.pressed.bool) and mouse_state then
             self.pressed.bool = true
@@ -69,7 +69,7 @@ function gamecontrollerClass:update(dt)
             local ax,ay = math.sin(theta)*r,math.cos(theta)*r
             ay = ay * self.multiplier
             ax = ax * self.multiplier
-            self.ax = ax / self.multiplier * self.size 
+            self.ax = ax / self.multiplier * self.size
             self.ay = ay / self.multiplier * self.size
             self.r = r
             return ax,ay,r

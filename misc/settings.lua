@@ -1,5 +1,5 @@
 -- global
--- it's a collection of magic values 
+-- it's a collection of magic values
 settings = {
     paid = true,
     please_text = "please purchase the game \n if you're enjoying it!",
@@ -46,7 +46,7 @@ settings = {
 
     menu_themes_text = "skins",
     menu_themes_y = window_height * 4/5                         - 15,
-    
+
     visual_menu_first_x = window_width *0                       + 15,
     visual_menu_wrap =5,
     visual_menu_wrap_themes = 2,
@@ -58,8 +58,8 @@ settings = {
     pl_btn_line_width = 2,
     -- menu settings font size       \/\/\/\/\/\/\/\/\/\/\/
     themes_act_ypos = window_height - window_height * 8 /80     - 15,
-    
-    
+
+
     gameover_scores_x = window_width * 50/52                    - 15,
     gameover_first_score_y = window_height * 1/20               + 15,
     gameover_spacing = window_height * 3/20,
@@ -145,13 +145,13 @@ settings = {
 
     collectible_fade_time = 4, -- inverse of the actual time in s
                                  -- so it's lighter
-    collectible_fadein = 2, --same as above                                 
+    collectible_fadein = 2, --same as above
     collectible_size = 7 * window_width/800,
 
     coin_time = 6,
     coin_prob = 0.75,
     coin_x = 15                                                 + 15,
-    coin_y = 15                                                 + 15,    
+    coin_y = 15                                                 + 15,
     coin_scale = 1.5,
     coin_scale_game = 1.5,
     coin_display_time = 2,
@@ -179,21 +179,21 @@ settings = {
     player_model = "ball_fill",
     skins_unlocked = {
         true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
         false,
         false,
         false,
@@ -201,9 +201,9 @@ settings = {
     },
     themes_unlocked ={
         true,
-        false,
-        false,
-        false,
+        true,
+        true,
+        true,
         false,
     },
     unlock_which = 1,
@@ -221,76 +221,80 @@ unpause_font =love.graphics.newFont(settings.font,settings.unpause_font_size)
 paused_main_font=love.graphics.newFont(settings.font,settings.paused_main_font_size)
 game_name_font=love.graphics.newFont(settings.font,settings.game_name_size)
 
+local s = 'settings.txt'
 -- changeable ones that need to be saved
 function read_settings()
-    local file, error = love.filesystem.newFile("settings.txt")
-    if not error then 
-        file:open("r")
-            local read = file:read("string")
-            if not (read == nil) then
-                local index = 1
-                local valtab = {}
-                for val in string.gmatch(read, "%S+") do
-                    valtab[index] = val
-                    index = index + 1
-                end
-                settings.theme_number = tonumber(valtab[1]) or settings.theme_number
-                settings.controller_size = tonumber(valtab[2]) or settings.controller_size
-                settings.draw_controller = (tostring(valtab[3]) == "true") or settings.draw_controller
-                settings.highscore = tonumber(valtab[4]) or settings.highscore
-                settings.player_model = tostring(valtab[5] or settings.player_model)
-                settings.coins = tonumber(valtab[6]) or 0
-                local n = 7
-                for i=n,#settings.skins_unlocked + n - 1 do
-                    settings.skins_unlocked[i - n + 1] = 
-                        tostring(valtab[i] or settings.skins_unlocked[i - n + 1]) == "true"
-                end
-                local n = n + #settings.skins_unlocked
-                settings.unlock_which = tonumber(valtab[n+1]) or settings.unlock_which
-                settings.unlock_which_theme = tonumber(valtab[n + 2]) or settings.unlock_which_theme
-                n = n + 2
-                for i=n,#settings.themes_unlocked + n - 1 do
-                    
-                    settings.themes_unlocked[i - n + 1] =
-                        tostring(valtab[i] or settings.themes_unlocked[i - n + 1]) == "true"
-                end
-                local n = n + #settings.themes_unlocked 
-               
-               
-
+    local file = love.filesystem.getInfo(s)
+    if not file then
+        save_settings()
+    end
+    local file = love.filesystem.getInfo(s)
+    if file then
+        local read = love.filesystem.read(s)
+        if not (read == nil) then
+            local index = 1
+            local valtab = {}
+            for val in string.gmatch(read, "%S+") do
+                valtab[index] = val
+                index = index + 1
             end
-        file:close()
+            settings.theme_number = tonumber(valtab[1]) or settings.theme_number
+            settings.controller_size = tonumber(valtab[2]) or settings.controller_size
+            settings.draw_controller = (tostring(valtab[3]) == "true") or settings.draw_controller
+            settings.highscore = tonumber(valtab[4]) or settings.highscore
+            settings.player_model = tostring(valtab[5] or settings.player_model)
+            settings.coins = tonumber(valtab[6]) or 0
+            local n = 7
+            for i=n,#settings.skins_unlocked + n - 1 do
+                settings.skins_unlocked[i - n + 1] =
+                    tostring(valtab[i] or settings.skins_unlocked[i - n + 1]) == "true"
+            end
+            local n = n + #settings.skins_unlocked
+            settings.unlock_which = tonumber(valtab[n+1]) or settings.unlock_which
+            settings.unlock_which_theme = tonumber(valtab[n + 2]) or settings.unlock_which_theme
+            n = n + 2
+            for i=n,#settings.themes_unlocked + n - 1 do
+
+                settings.themes_unlocked[i - n + 1] =
+                    tostring(valtab[i] or settings.themes_unlocked[i - n + 1]) == "true"
+            end
+            local n = n + #settings.themes_unlocked
+
+
+
+        end
         file = nil
         settings.theme = theme_names[settings.theme_number]
     end
 end
 
 function save_settings()
-    local file = love.filesystem.newFile("settings.txt","w")
-    file:open("w")
-    file:write(settings.theme_number)
-        file:write("\n")
-    file:write(settings.controller_size)
-        file:write("\n")
-    file:write(tostring(settings.draw_controller))
-        file:write("\n")
-    file:write(tostring(settings.highscore or 0))
-        file:write("\n")
-    file:write(tostring(settings.player_model))
-        file:write("\n")
-    file:write(tostring(settings.coins))
-        file:write("\n")
+    love.filesystem.getInfo(s)
+    love.filesystem.write(s, "")
+
+    love.filesystem.append(s,settings.theme_number)
+        love.filesystem.append(s,"\n")
+    love.filesystem.append(s,settings.controller_size)
+        love.filesystem.append(s,"\n")
+    love.filesystem.append(s,tostring(settings.draw_controller))
+        love.filesystem.append(s,"\n")
+    love.filesystem.append(s,tostring(settings.highscore or 0))
+        love.filesystem.append(s,"\n")
+    love.filesystem.append(s,tostring(settings.player_model))
+        love.filesystem.append(s,"\n")
+    love.filesystem.append(s,tostring(settings.coins))
+        love.filesystem.append(s,"\n")
     for _,val in pairs(settings.skins_unlocked) do
-        file:write(tostring(val))
-            file:write("\n")
+        love.filesystem.append(s,tostring(val))
+            love.filesystem.append(s,"\n")
     end
-    file:write(tostring(settings.unlock_which))
-        file:write("\n")
-    file:write(tostring(settings.unlock_which_theme))
-        file:write("\n")
+    love.filesystem.append(s,tostring(settings.unlock_which))
+        love.filesystem.append(s,"\n")
+    love.filesystem.append(s,tostring(settings.unlock_which_theme))
+        love.filesystem.append(s,"\n")
     for _,val in pairs(settings.themes_unlocked) do
-        file:write(tostring(val))
-            file:write("\n")
+        love.filesystem.append(s,tostring(val))
+            love.filesystem.append(s,"\n")
     end
     file = nil
 end

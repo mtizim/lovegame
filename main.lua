@@ -4,6 +4,11 @@ polygon = require("dependencies.hardoncollider.polygon")
 -- inspect = require("inspect")
 
 osString = love.system.getOS( )
+if osString == "Web" then
+    -- Some small fakery
+    osString = "Windows"
+end
+
 window_width, window_height = love.graphics.getDimensions()
 max = 2 * math.sqrt(window_height ^ 2 + window_width ^2)
 
@@ -44,13 +49,15 @@ STEPTIME = 0
 DISPLAY_FRAMES = false
 
 
+
 function love.load()
+
     coin_image = love.graphics.newImage("coin.png")
     settings.coin_font_size = coin_image:getHeight() * settings.coin_scale
     coin_font = love.graphics.newFont(settings.font,settings.coin_font_size)
-    
+
     application:init()
-    
+
     if DEBUG then
         local clock = os.clock
         function sleep(n)  -- seconds
@@ -67,7 +74,7 @@ function love.update(dt)
     -- print(collectgarbage("count"))
     application:update(dt)
     -- print(collectgarbage("count"))
-    
+
     if DISPLAY_FRAMES then delta_time = dt; total_time =total_time + dt end
     if DEBUG then
         sleep(STEPTIME)
@@ -77,6 +84,8 @@ end
 -- for the lulz
 -- xxxx = 0
 function love.draw()
+
+    love.graphics.scale(sx,sy)
     -- for the lulz
     -- xxxx = xxxx + 0.002
     -- love.graphics.translate(window_width/2,window_height/2)
@@ -84,7 +93,7 @@ function love.draw()
     -- love.graphics.translate(-window_width/2,-window_height/2)
     application:draw()
 
-    if DISPLAY_FRAMES then 
+    if DISPLAY_FRAMES then
         love.graphics.setColor({1,1,1})
         love.graphics.print(1/delta_time,30,10);
     end
@@ -98,7 +107,7 @@ function love.draw()
 end
 
 --I only ever need the first touch
--- so this function gives me the fist touch 
+-- so this function gives me the fist touch
 -- as a global first
 first = nil
 function love.touchpressed(id, x, y)
