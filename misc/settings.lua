@@ -155,8 +155,7 @@ settings = {
     coin_scale = 1.5,
     coin_scale_game = 1.5,
     coin_display_time = 2,
-    -- dynamically edited later on
-    coin_font_size = 12,
+    coin_font_size = 32,
 
     unlocked_button_y =2/5 * window_height                      + 15,
     unlocked_button_theme_text = "theme unlocked!",

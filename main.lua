@@ -52,8 +52,6 @@ DISPLAY_FRAMES = false
 
 function love.load()
 
-    coin_image = love.graphics.newImage("coin.png")
-    settings.coin_font_size = coin_image:getHeight() * settings.coin_scale
     coin_font = love.graphics.newFont(settings.font,settings.coin_font_size)
 
     application:init()

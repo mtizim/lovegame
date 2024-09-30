@@ -31,8 +31,8 @@ function visual_menuClass:init(parent)
     spac = settings.theme_button_spacing
     for i=0,#theme_names-1 do
         local wrap = math.floor(i/settings.visual_menu_wrap_themes)
-        local x = window_width - f_x 
-            - (i%settings.visual_menu_wrap +1 ) * (siz +spac) 
+        local x = window_width - f_x
+            - (i%settings.visual_menu_wrap +1 ) * (siz +spac)
             + wrap * (siz + spac) * settings.visual_menu_wrap_themes
         self.theme_buttons[i+1] = theme_btnClass(window_width - f_x - (i) * (spac + siz) - siz,
                                             window_height + siz/2,
@@ -56,14 +56,12 @@ function  visual_menuClass:draw()
 end
 
 function visual_menuClass:draw_coins()
-    local x = settings.gameover_scores_x - coin_image:getWidth() * settings.coin_scale,
-      - settings.offset
+    local x = settings.gameover_scores_x - settings.offset
     local y = settings.game_name_size +  2 * settings.offset
     love.graphics.setFont(coin_font)
     local d = coin_font:getWidth(tostring(settings.coins)) + settings.offset
     love.graphics.setColor(gold)
-    love.graphics.draw(coin_image,x - coin_image:getWidth() * settings.coin_scale,y
-            ,0,settings.coin_scale)
+    drawCoin(themes[settings.theme].coin,x,y,1)
     love.graphics.setColor(themes[settings.theme].coin)
     love.graphics.print(settings.coins,x - d,y)
 end

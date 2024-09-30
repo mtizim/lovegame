@@ -353,13 +353,13 @@ end
 
 function gameClass:draw_coins()
     if self.coin_display_time > 0 then
-        local x = coin_image:getWidth() * settings.coin_scale +  settings.coin_x
-        local y = settings.coin_y  -  0.1 * coin_image:getHeight() * settings.coin_scale
+        local x = settings.coin_scale +  settings.coin_x
+        local y = settings.coin_y
         love.graphics.setFont(coin_font)
         love.graphics.setColor(gold)
-        love.graphics.draw(coin_image,settings.coin_x,settings.coin_y,0,settings.coin_scale)
+        drawCoin(self.theme.coin,settings.coin_x,settings.coin_y,1)
         love.graphics.setColor(self.theme.coin)
-        love.graphics.print(settings.coins,x,y)
+        love.graphics.print(settings.coins,x + 8,y)
     end
 end
 
