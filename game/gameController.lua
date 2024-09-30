@@ -14,7 +14,7 @@ function gamecontrollerClass:update(dt)
     --windows/linux
     if osString == "Windows" or osString =="Linux" or osString =="OS X" then
         local mouse_state = love.mouse.isDown(1)
-        if (not self.pressed.bool) and mouse_state then
+        if (true or not self.pressed.bool) and mouse_state then
             self.pressed.bool = true
             -- position at which the mouse was first pressed
             self.pressed.x,self.pressed.y = love.mouse.getPosition()
@@ -22,7 +22,7 @@ function gamecontrollerClass:update(dt)
             self.ay = nil
             self.r = nil
             return nil,nil,nil
-        elseif mouse_state then
+        elseif true or mouse_state then
             local x,y = love.mouse.getPosition()
             -- deviations from the center of the first press
             local delta_y,delta_x = y - self.pressed.y,x - self.pressed.x
