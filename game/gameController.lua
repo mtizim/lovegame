@@ -1,6 +1,7 @@
 gamecontrollerClass = Class("Game controller")
 
-function gamecontrollerClass:init(size,multiplier)
+function gamecontrollerClass:init(game, size,multiplier)
+    self.game = game
     self.size = size
     self.multiplier = multiplier
     self.pressed = {}
@@ -8,9 +9,38 @@ function gamecontrollerClass:init(size,multiplier)
     self.pressed.x , self.pressed.y= 0
 end
 
+function joyscaling(x)
+    return math.pow(x,0.8)
+end
+
 --Calculates the appropriate accelerations
 -- both ifs are the same thing for different platforms
 function gamecontrollerClass:update(dt)
+    local alternative = true
+
+    if alternative and osString == "Windows" or osString =="Linux" or osString =="OS X" then
+        self.size = 100
+        self.pressed.bool = false
+        player = self.game.player
+        local x,y = love.mouse.getPosition()
+        -- deviations from the center of the first press
+        local delta_y,delta_x = y - player.y,x - player.x
+        -- conversion into radial coordinates
+        local theta = math.atan2(delta_x,delta_y)
+        -- r is percentage of the max distance from the middle point
+        local r = math.min(joyscaling( delta_x*delta_x + delta_y*delta_y ),
+                           self.size) / self.size
+        -- then return of appropriate values given the radial coords
+        -- changing into cartesian
+        local ax,ay = math.sin(theta)*r,math.cos(theta)*r
+        local ax = ax * self.multiplier
+        local ay = ay * self.multiplier
+        self.ax = ax  / self.multiplier * self.size
+        self.ay = ay  / self.multiplier * self.size
+        self.r = r
+        return ax,ay,r
+    end
+
     --windows/linux
     if osString == "Windows" or osString =="Linux" or osString =="OS X" then
         local mouse_state = love.mouse.isDown(1)

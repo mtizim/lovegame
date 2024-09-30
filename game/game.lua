@@ -1,5 +1,6 @@
 gameClass = Class("game")
 
+
 function gameClass:init()
     --initializing appropriate things
 
@@ -8,7 +9,7 @@ function gameClass:init()
     self.collectibles = linkedlistClass()
     self.coin_list = linkedlistClass()
     self.collider = hc.new()
-    self.game_controller = gamecontrollerClass(settings.controller_size,
+    self.game_controller = gamecontrollerClass(self, settings.controller_size,
                                                settings.player_maxspeed)
     self.laser_every_timer = 0
     -- is it the first time showing the gameover screen?
